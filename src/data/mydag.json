@@ -1,0 +1,94 @@
+{
+  "nodes": [
+    {
+      "title": "new concept",
+      "id": 0,
+      "x": 897,
+      "y": 240
+    },
+    {
+      "title": "new concept",
+      "id": 1,
+      "x": 734,
+      "y": 75
+    },
+    {
+      "id": 2,
+      "title": "new concept",
+      "x": 611,
+      "y": 255
+    },
+    {
+      "id": 3,
+      "title": "new concept",
+      "x": 594,
+      "y": 428
+    },
+    {
+      "id": 4,
+      "title": "asiohfibouaifua",
+      "x": 899,
+      "y": 433
+    },
+    {
+      "id": 5,
+      "title": "new concept",
+      "x": 594,
+      "y": 602
+    },
+    {
+      "id": 6,
+      "title": "new concept",
+      "x": 892,
+      "y": 610
+    },
+    {
+      "id": 7,
+      "title": "new concept",
+      "x": 703.7623291015625,
+      "y": 801.5961303710938
+    }
+  ],
+  "edges": [
+    {
+      "source": 1,
+      "target": 0
+    },
+    {
+      "source": 1,
+      "target": 2
+    },
+    {
+      "source": 2,
+      "target": 3
+    },
+    {
+      "source": 0,
+      "target": 3
+    },
+    {
+      "source": 0,
+      "target": 4
+    },
+    {
+      "source": 3,
+      "target": 5
+    },
+    {
+      "source": 5,
+      "target": 4
+    },
+    {
+      "source": 4,
+      "target": 6
+    },
+    {
+      "source": 5,
+      "target": 7
+    },
+    {
+      "source": 6,
+      "target": 7
+    }
+  ]
+}
