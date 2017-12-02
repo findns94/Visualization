@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery-3.1.1.js"></script>
+</head>
+<body>
+    <a href="https://www.sololearn.com/">Click here</a>
+    <div>a</div>
+</body>
+<script>
+    $(function () {
+        var val = $("a").attr("href");
+        alert(val);
+    });
+
+    $("div").click(function () {
+        $("div").append("a");
+        $("div").off("click");
+    })
+
+</script>
+</html>

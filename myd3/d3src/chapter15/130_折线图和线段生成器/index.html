@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<canvas width="960" height="600"></canvas>
+
+<!--
+<script src="https://d3js.org/d3.v3.min.js"></script>
+-->
+
+<script src="../../d3/4.x/d3.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+
+<script>
+
+var canvas = document.querySelector("canvas");
+var ctx = canvas.getContext("2d");
+var width = canvas.width;
+var height = canvas.height;
+
+var data = [20, 10, 30, 15, 40, 10, 20];
+
+var xScale = d3.scalePoint()
+	.domain(d3.range(data.length))
+	.range([100, 500]);
+
+var yScale = d3.scaleLinear()
+	.domain([0, d3.max(data)])
+	.range([250, 100]);
+
+
+var line = d3.line()
+	.x(function(d,i){ return xScale(i); })
+	.y(function(d,i){ return yScale(d); })
+	.curve(d3.curveCardinal.tension(0.4))
+	.context(ctx);
+
+ctx.beginPath();
+line(data);
+ctx.strokeStyle = "steelblue";
+ctx.lineWidth = 4;
+ctx.lineCap="round";
+ctx.lineJoin="round";
+ctx.stroke();
+
+
+//折点处添加圆点
+ctx.fillStyle = "white";
+for (var i = 0; i < data.length; i++) {
+	ctx.beginPath();
+	ctx.arc(xScale(i), yScale(data[i]), 3, 0, Math.PI * 2  );
+	ctx.stroke();
+	ctx.fill();
+}
+
+
+//标注最大值、最小值
+var max = d3.max(data);
+var loc_max = {
+	x:  xScale(data.indexOf(max)),
+	y:  yScale(max)
+}
+
+ctx.fillStyle = "red";
+ctx.beginPath();
+ctx.arc(loc_max.x + 30, loc_max.y - 20, 20, 0, Math.PI * 2  );
+ctx.fill();
+
+ctx.fillStyle = "white";
+ctx.font = "16px Comic Sans MS";
+ctx.textAlign = "center";
+ctx.fillText(max, loc_max.x + 30, loc_max.y - 15);
+
+</script>

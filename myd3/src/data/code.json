@@ -1,0 +1,19 @@
+[
+  {
+    "name": "demo.java",
+    "source": [
+      {
+        "line": "1",
+        "content": "package account;"
+      },
+      {
+        "line": "2",
+        "content": "import java.util.Random;"
+      },
+      {
+        "line": "3",
+        "content": "public class Account {"
+      }
+    ]
+  }
+]

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript" src="d3.v3.min.js"></script>
+<script>
+    function clickcancel() {
+        var event = d3.dispatch('click', 'dblclick');
+        function cc(selection) {
+            var down,
+                tolerance = 5,
+                last,
+                wait = null;
+            // euclidean distance
+            function dist(a, b) {
+                return Math.sqrt(Math.pow(a[0] - b[0], 2), Math.pow(a[1] - b[1], 2));
+            }
+            selection.on('mousedown', function() {
+                down = d3.mouse(document.body);
+                last = +new Date();
+            });
+            selection.on('mouseup', function() {
+                if (dist(down, d3.mouse(document.body)) > tolerance) {
+                    return;
+                } else {
+                    if (wait) {
+                        window.clearTimeout(wait);
+                        wait = null;
+                        event.dblclick(d3.event);
+                    } else {
+                        wait = window.setTimeout((function(e) {
+                            return function() {
+                                event.click(e);
+                                wait = null;
+                            };
+                        })(d3.event), 300);
+                    }
+                }
+            });
+        }
+        return d3.rebind(cc, event, 'on');
+    }
+
+    var cc = clickcancel();
+
+    d3.json("data/code.json", function (data) {
+
+        var width = 1600;
+        var height = 720;
+
+        //边界空白
+        var padding = {left: 80, right: 50, top: 20, bottom: 20};
+
+        var svg = d3.select("body")
+            .append("svg")
+            .attr("width", width + padding.left + padding.right)
+            .attr("height", height + padding.top + padding.bottom)
+            .append("g")
+            .attr("transform", "translate(" + padding.left + "," + padding.top + ")");
+
+        var paddingLeftRight = 18; // adjust the padding values depending on font and font size
+        var paddingTopBottom = 8;
+
+        svg.selectAll("rect")
+            .data(data)
+            .enter()
+            .append("rect")
+            .attr("width", 30)
+            .attr("height", 30)
+            .style("fill", function (d) {
+                return "lightsteelblue";
+            })
+            .call(cc)
+            .on('dblclick', function(d) {
+                obj = d3.select(this)
+                    .attr("transform", "translate(" + padding.left + "," + padding.top + ")")
+                    .transition()
+                    .attr("x", function(d) { return 2*(- d.bb.width/2 - paddingLeftRight/2); })
+                    .attr("y", function(d) { return 2*(- d.bb.height + paddingTopBottom/2);  })
+                    .attr("width", function(d) { return 2*(d.bb.width + paddingLeftRight); })
+                    .attr("height", function(d) { return 2*(d.bb.height + paddingTopBottom); })
+            });
+
+        svg.selectAll("text")
+            .data(data)
+            .enter()
+            .append("text")
+            .attr("dy", ".35em")
+            .text(function (d) {
+                return d.name;
+            })
+            .style("fill-opacity", function (d) {
+                d.bb = this.getBBox();
+                console.log(d);
+                console.log(d.bb);
+                return 1;
+            })
+            .attr("text-anchor", "middle");
+
+    });
+
+
+
+</script>
+</body>
+</html>

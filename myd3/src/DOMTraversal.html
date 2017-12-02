@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery-3.1.1.js"></script>
+
+    <style media="screen">
+        body, div, ul, li {
+            padding: 5px;
+            margin: 15px;
+        }
+        p {
+            border: 1px solid black;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>body
+    <div style="width: 300px;">div
+        <ul>ul
+            <li>li
+                <p>paragraph</p>
+            </li>
+        </ul>
+    </div>
+</body>
+<script>
+    $(function () {
+        var e = $("p").parents();
+        e.css("border", "2px solid red");
+    });
+</script>
+
+</html>

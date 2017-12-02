@@ -1,0 +1,87 @@
+{
+  "name": "flare",
+  "children": [
+    {
+      "name": "util",
+      "children": [
+        {"name": "Arrays", "size": 8258},
+        {"name": "Colors", "size": 10001},
+        {"name": "Dates", "size": 8217},
+        {"name": "Displays", "size": 12555},
+        {"name": "Filter", "size": 2324},
+        {"name": "Geometry", "size": 10993},
+        {
+          "name": "heap",
+          "children": [
+            {"name": "FibonacciHeap", "size": 9354},
+            {"name": "HeapNode", "size": 1233}
+          ]
+        },
+        {"name": "IEvaluable", "size": 335},
+        {"name": "IPredicate", "size": 383},
+        {"name": "IValueProxy", "size": 874},
+        {
+          "name": "math",
+          "children": [
+            {"name": "DenseMatrix", "size": 3165},
+            {"name": "IMatrix", "size": 2815},
+            {"name": "SparseMatrix", "size": 3366}
+          ]
+        },
+        {"name": "Maths", "size": 17705},
+        {"name": "Orientation", "size": 1486},
+        {
+          "name": "palette",
+          "children": [
+            {"name": "ColorPalette", "size": 6367},
+            {"name": "Palette", "size": 1229},
+            {"name": "ShapePalette", "size": 2059},
+            {"name": "SizePalette", "size": 2291}
+          ]
+        },
+        {"name": "Property", "size": 5559},
+        {"name": "Shapes", "size": 19118},
+        {"name": "Sort", "size": 6887},
+        {"name": "Stats", "size": 6557},
+        {"name": "Strings", "size": 22026}
+      ]
+    },
+    {
+      "name": "vis",
+      "children": [
+        {
+          "name": "axis",
+          "children": [
+            {"name": "Axes", "size": 1302},
+            {"name": "Axis", "size": 24593},
+            {"name": "AxisGridLine", "size": 652},
+            {"name": "AxisLabel", "size": 636},
+            {"name": "CartesianAxes", "size": 6703}
+          ]
+        },
+        {
+          "name": "data",
+          "children": [
+            {"name": "Data", "size": 20544},
+            {"name": "DataList", "size": 19788},
+            {"name": "DataSprite", "size": 10349},
+            {"name": "EdgeSprite", "size": 3301},
+            {"name": "NodeSprite", "size": 19382},
+            {
+              "name": "render",
+              "children": [
+                {"name": "ArrowType", "size": 698},
+                {"name": "EdgeRenderer", "size": 5569},
+                {"name": "IRenderer", "size": 353},
+                {"name": "ShapeRenderer", "size": 2247}
+              ]
+            },
+            {"name": "ScaleBinding", "size": 11275},
+            {"name": "Tree", "size": 7147},
+            {"name": "TreeBuilder", "size": 9930}
+          ]
+        }
+      ]
+    }
+  ]
+}

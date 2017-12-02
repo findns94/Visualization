@@ -1,0 +1,43 @@
+<html>
+	<meta charset="UTF-8">
+	<head>
+		<script type="text/javascript">
+			function ReadLocalFile()
+			{
+				// 从File控件里面读取文件路径
+				var url= document.getElementById('local_file').value;
+
+				url = './self_intro.txt';
+
+				alert(url);
+				 
+				// 声明一个 FileSystemObject 的实例
+				var fileSysObj = new ActiveXObject("Scripting.FileSystemObject");
+
+                alert(url);
+				 
+				// 声明一个 textStream 对象 用来打开文件
+				var inputTextStream = fileSysObj.OpenTextFile(url,1,true);
+
+                alert(url);
+				 
+				var str = "";
+				while(!inputTextStream.AtEndOfStream)
+				{
+			       str += inputTextStream.ReadLine() + "\r\n";
+				}
+				alert(str);
+				 
+				//关闭文件流
+				inputTextStream.Close();
+			 
+			}
+		</script>
+	</head>
+	<body>
+		<form method="post" action="">
+			<input type="file" id="local_file" name="local_file"/>
+			<input type="button" value="读取文件内容" onclick="ReadLocalFile()">
+		</form>
+	</body>
+</html>

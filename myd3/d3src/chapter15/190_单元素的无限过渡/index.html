@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<button onclick="interrupt()">打断</button>
+<button onclick="restart()">开始</button><br>
+<svg id="mysvg" width="980" height="600"></svg>
+<script src="../../d3/4.x/d3.min.js"></script>
+<script>
+
+var svg = d3.select("#mysvg");
+var width = svg.attr("width");
+var height = svg.attr("height");
+
+var circle = svg.append("circle")
+	.attr("cx", 100)
+	.attr("cy", 100)
+	.attr("r", 25)
+	.attr("fill","steelblue");
+
+circle.transition().duration(1000)
+	.on("start", slide);
+
+function slide(){
+	d3.active(this)
+		.attr("cx", 400)
+		.transition().duration(1000)
+		.attr("cx", 100)
+		.transition().duration(1000)
+		.on("start",slide);
+}
+
+
+function interrupt(){
+	circle.interrupt();
+}
+
+function restart(){
+	circle.transition().duration(1000)
+	.on("start", slide);
+}
+
+</script>

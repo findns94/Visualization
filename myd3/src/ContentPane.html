@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery-3.1.1.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+<ul class="nav nav-tabs" id="myTab">
+    <li class="active"><a href="#home">首页</a></li>
+    <li><a href="#profile">介绍</a></li>
+    <li><a href="#messages">消息</a></li>
+    <li><a href="#settings">设置</a></li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane active" id="home">
+    <pre>
+    public static void main(String[] args){
+        init();
+        TestPaintComponent frame = new TestPaintComponent();
+        frame.setTitle("TestPaintComponent");
+        frame.setSize(1920,1050);
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+    }
+    </pre>
+    </div>
+    <div class="tab-pane" id="profile">介绍内容...</div>
+    <div class="tab-pane" id="messages">.消息内容..</div>
+    <div class="tab-pane" id="settings">.设置内容..</div>
+</div>
+
+<script>
+    $(function () {
+        $('#myTab a:first').tab('show');
+    });
+    $('#myTab a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    })
+</script>
+</body>
+</html>

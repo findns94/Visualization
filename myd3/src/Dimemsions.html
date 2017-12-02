@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery-3.1.1.js"></script>
+
+    <style media="screen">
+        div {
+            width: 300px;
+            height: 100px;
+            padding: 10px;
+            margin: 20px;
+            border: 3px solid blue;
+            background-color: red;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div></div>
+</body>
+
+<script>
+    $(function(){
+        var txt = "";
+        txt += "width: " + $("div").width() + " ";
+        txt += "height: " + $("div").height() + "<br/>";
+        txt += "innerWidth: " + $("div").innerWidth() + " ";
+        txt += "innerHeight: " + $("div").innerHeight() + "<br/>";
+        txt += "outerWidth: " + $("div").outerWidth() + " ";
+        txt += "outerHeight: " + $("div").outerHeight() + "<br/>";
+
+        $("div").html(txt);
+    });
+</script>
+</html>

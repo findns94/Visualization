@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<canvas id="mycanvas" width="960" height="600"></canvas>
+<svg width="300" height="300"></svg>
+<script src="../../d3/4.x/d3.min.js"></script>
+<script src="./js/topojson.js"></script>
+<script>
+
+var canvas = document.getElementById("mycanvas");
+var ctx = canvas.getContext("2d");
+var width = canvas.width;
+var height = canvas.height;
+
+var grat = d3.geoGraticule()
+	.extent([[-180, -90],[180,90]])
+	.step([10,10]);
+
+var grid = grat();
+
+var projection = d3.geoOrthographic()
+		.center([0, 0])
+		.scale(200)
+		.rotate([0,30,30])
+    	.translate([width/2, height/2]);
+	
+var path = d3.geoPath()
+	.projection(projection)
+	.context(ctx);
+	
+	
+render();
+
+function render(){
+	ctx.fillStyle = "white";
+	ctx.fillRect(0, 0, width, height);
+
+	ctx.strokeStyle = "black";
+	ctx.lineWidth = 1;
+	ctx.beginPath();
+	path(grid);
+	ctx.stroke();
+
+	
+	ctx.lineWidth = 2;
+	ctx.beginPath();
+	ctx.arc(width/2, height/2, 200, 0, Math.PI*2);
+	ctx.stroke();
+}
+
+
+</script>
+</html>

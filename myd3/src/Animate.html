@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery-3.1.1.js"></script>
+
+    <style media="screen">
+        div {
+            display: inline-block;
+            padding: 25px;
+            background-color: grey;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div>Click me</div>
+</body>
+<script>
+    $(function () {
+        $("div").click(function () {
+            $("div").animate({
+                width: '+=250px',
+                height: '+=250px'
+            }, 1000);
+        });
+    });
+</script>
+</html>

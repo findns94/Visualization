@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<canvas id="mycanvas" width="960" height="600"></canvas>
+<script>
+
+var canvas = document.getElementById("mycanvas");
+var ctx = canvas.getContext("2d");
+var width = canvas.width;
+var height = canvas.height;
+
+
+var img = new Image();
+img.src = "d3icon.png";
+img.onload = function(){
+	ctx.drawImage(img, 0, 0);
+}
+
+</script>
+</html>

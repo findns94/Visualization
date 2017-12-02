@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<canvas id="mycanvas" width="960" height="600"></canvas>
+<script>
+
+var canvas = document.getElementById("mycanvas");
+var ctx = canvas.getContext("2d");
+var width = canvas.width;
+var height = canvas.height;
+
+
+ctx.save();
+ctx.scale(2,3);
+ctx.fillRect(10,10,100,100);
+ctx.restore();
+
+ctx.save();
+ctx.rotate(Math.PI*0.25);
+ctx.fillRect(400,0,100,100);
+ctx.restore();
+
+ctx.save();
+ctx.translate(0,400);
+ctx.fillRect(400,0,100,100);
+ctx.restore();
+
+</script>
+</html>

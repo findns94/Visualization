@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link href="styles/vs.css" rel="stylesheet"/>
+    <script src="highlight.pack.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad();
+        //代码高亮自定义
+        $("code").each(function(){
+            alert("fuck!");
+            $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+        });
+    </script>
+</head>
+<body>
+<pre>
+        <code>
+package cn.edu.tsinghua.thss;
+
+public class Dot {
+    private int x;
+    private int y;
+
+    public Dot(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+
+}
+        </code>
+    </pre>
+</body>
+
+</html>

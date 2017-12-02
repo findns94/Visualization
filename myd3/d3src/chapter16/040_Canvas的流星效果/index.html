@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<canvas id="mycanvas" width="960" height="600"></canvas>
+<svg width="300" height="300"></svg>
+<script src="../../d3/4.x/d3.min.js"></script>
+<script>
+
+var canvas = document.getElementById("mycanvas");
+var ctx = canvas.getContext("2d");
+var width = canvas.width;
+var height = canvas.height;
+
+var ball = {
+	x: 100,
+	y: 100,
+	t: 0,
+
+	render: function(){
+		ctx.fillStyle = "steelblue";
+		ctx.beginPath();
+		ctx.arc(this.x, this.y, 10, 0, Math.PI*2);
+		ctx.fill();
+	},
+	/*
+	update: function(){
+		this.x += 4;		//更新小球的位置
+		if( this.x > 500){
+			this.x = 100;
+		}
+	},*/
+
+	update: function(){
+		this.x = 300 + 100*Math.cos(this.t);
+		this.y = 300 + 100*Math.sin(this.t);
+		this.t += 0.05;
+	}
+}
+
+setInterval(function(){
+
+	ctx.fillStyle = "rgba(255,255,255,0.1)";
+	ctx.fillRect(0, 0, width, height);
+
+	ball.render();
+	ball.update();
+
+}, 20);
+
+</script>
+</html>

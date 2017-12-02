@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="../d3.min.js"></script>
+</head>
+<body>
+    <p>Lorem ipsom</p>
+    <p>Lorem ipsom</p>
+    <p>Lorem ipsom</p>
+    <p>Lorem ipsom</p>
+    <circle></circle>
+    <circle></circle>
+    <circle></circle>
+    <circle></circle>
+    <circle></circle>
+    <circle></circle>
+</body>
+
+<script>
+    d3.select("body").append("p").text("Hello World");
+    d3.select("body").append("p").text("Hello World");
+    d3.selectAll("p").style("color", function(){
+        return "hsl(" + Math.random() * 360 + ",100%,50%)";
+    });
+    var radius_list = [4,8,15,16,23,42];
+    d3.selectAll("circle").data(radius_list).enter().append().attr("r",function (d) {
+        return Math.random() * 10;
+    })
+</script>
+</html>

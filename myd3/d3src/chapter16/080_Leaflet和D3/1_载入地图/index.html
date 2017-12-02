@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh">  
+<head>
+	<meta charset="utf-8">  
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<meta name="description" content="">
+	<link rel="stylesheet" href="./leaflet.css" />
+<style>
+#mapid { 
+	margin: auto;
+	width: 1000px;
+	height: 480px; 
+}
+</style>
+</head> 
+<body>
+<div id="mapid"></div>
+<script src="./leaflet.js"></script>
+<script>
+var mymap = L.map('mapid').setView([39, 116], 7);
+
+L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibHpobHp6IiwiYSI6ImNpdXh6cGt5ZzA0Y2UyenBkdmR3dWh3M3YifQ.uXyfly-JCXmgin5uDlnL5g', {
+    maxZoom: 18
+}).addTo(mymap);
+
+</script>
+</body>
+</html>

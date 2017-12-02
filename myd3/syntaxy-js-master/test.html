@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="./dist/css/syntaxy.light.min.css" />
+
+</head>
+<body>
+<pre id="codebox" data-type="default" data-syntax="javascript">
+package cn.edu.tsinghua.thss;
+
+public class Dot {
+    private int x;
+    private int y;
+
+    public Dot(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+
+}
+    </pre>
+</body>
+<script type="text/javascript" src="./dist/js/syntaxy.min.js"></script>
+<script type="text/javascript">
+    var options = {};
+    var codebox = document.getElementById( 'codebox' );
+    var syntaxy = new Syntaxy( codebox, options );
+    // add custom filters, modify options, etc. then...
+    syntaxy.render();
+</script>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<canvas width="980" height="1000"></canvas>
+<script src="../../d3/4.x/d3.min.js"></script>
+<script>
+
+var canvas = document.querySelector("canvas");
+var ctx = canvas.getContext("2d");
+var width = canvas.width;
+var height = canvas.height;
+
+var data = [
+  {year: 2005, PC: 3000, SmartPhone: 2000, Software: 1100 },
+  {year: 2006, PC: 1300, SmartPhone: 4000, Software: 1700 },
+  {year: 2007, PC: 3700, SmartPhone: 1810, Software: 1680 },
+  {year: 2008, PC: 4900, SmartPhone: 6540, Software: 4000 },
+  {year: 2009, PC: 700,  SmartPhone: 2820, Software: 4900 }
+];
+
+
+var stack = d3.stack()
+    .keys(["PC", "SmartPhone", "Software"]);
+
+var series = stack(data);
+
+
+console.log(series);
+/*
+for(var i=0; i<series.length; i++){
+	console.log( "[" + series[i][0] + "], " + "[" + series[i][1] + "], " + "[" + series[i][2] + "], " + "[" + series[i][3] + "], " + "[" + series[i][4] + "] " );
+}
+*/
+
+var max = d3.max(series[series.length-1], function(d){
+	return d[1];
+});
+
+
+var xScale = d3.scalePoint()
+	.domain( d3.range(data.length) )
+	.range([200, 600]);
+
+var yScale = d3.scaleLinear()
+	.domain([0, max])
+	.range([500, 200]);
+
+var area = d3.area()
+	.x( function(d,i){ return xScale(i); } )
+	.y0( function(d,i){ return yScale(d[0]); } )
+	.y1( function(d,i){ return yScale(d[1]); } )
+	.context(ctx);
+
+
+var color = d3.scaleOrdinal(d3.schemeCategory10);
+for(var i=0; i<series.length; i++){
+	ctx.fillStyle = color(i);
+	ctx.beginPath();
+	area(series[i]);
+	ctx.fill();
+}
+
+
+ctx.textAlign = "left";
+ctx.font = "12px Comic Sans MS";
+ctx.fillStyle = "black";
+for(var i=0; i<series.length; i++){
+	ctx.fillStyle = color(i);
+	ctx.beginPath();
+	ctx.arc(200, 150-i*20, 6, 0, Math.PI*2);
+	ctx.fill();
+	ctx.fillText( series[i].key , 200 + 10, 150-i*20 + 5 );
+}
+
+ctx.textAlign = "center";
+ctx.font = "12px Comic Sans MS";
+ctx.fillStyle = "black";
+for(var i=0; i<data.length; i++){
+	ctx.fillText( data[i].year , xScale(i), 520 );
+}
+
+
+</script>

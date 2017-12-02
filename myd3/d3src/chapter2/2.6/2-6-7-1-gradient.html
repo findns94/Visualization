@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<canvas id="mycanvas" width="960" height="600"></canvas>
+<script>
+
+var canvas = document.getElementById("mycanvas");
+var ctx = canvas.getContext("2d");
+var width = canvas.width;
+var height = canvas.height;
+
+
+var linearGrad = ctx.createLinearGradient(100,0,250,0);
+linearGrad.addColorStop(0,"blue");
+linearGrad.addColorStop(1,"white");
+
+ctx.fillStyle = linearGrad;
+ctx.fillRect(100,100,150,100);
+
+
+var radialGrad = ctx.createRadialGradient(375,150,10,375,150,100);
+radialGrad.addColorStop(0,"red");
+radialGrad.addColorStop(1,"white");
+
+ctx.fillStyle = radialGrad;
+ctx.fillRect(300,100,150,100);
+
+</script>
+</html>

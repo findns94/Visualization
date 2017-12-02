@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<canvas id="mycanvas" width="960" height="600"></canvas>
+<svg width="300" height="300"></svg>
+<script src="../../d3/4.x/d3.min.js"></script>
+<script src="./js/topojson.js"></script>
+<script>
+
+var canvas = document.getElementById("mycanvas");
+var ctx = canvas.getContext("2d");
+var width = canvas.width;
+var height = canvas.height;
+
+var grat = d3.geoGraticule()
+	.extent([[-180, -90],[180,90]])
+	.step([10,10]);
+
+var grid = grat();
+
+var projection = d3.geoOrthographic()
+		.center([0, 0])
+		.scale(200)
+		.rotate([0,0,0])
+    	.translate([width/2, height/2]);
+	
+var path = d3.geoPath()
+	.projection(projection)
+	.context(ctx);
+
+var color = d3.scaleOrdinal(d3.schemeCategory20c);
+
+var transform = d3.zoomIdentity;
+
+d3.json("./data/world_map_31kb.json", function(error, toporoot){
+
+	if (error) 
+		return console.error(error);
+	
+	//将TopoJSON对象转换成GeoJSON，保存在georoot中
+	var georoot = topojson.feature(toporoot,toporoot.objects.countries);
+
+	var zoom = d3.zoom()
+		.scaleExtent([1 / 2, 3])
+  		.on('zoom', zoomed);
+
+  	function zoomed(){
+  		transform = d3.event.transform;
+  		if(d3.event.sourceEvent.type == "wheel" ){
+  			projection.scale(200*transform.k);
+  		}
+
+  		if(d3.event.sourceEvent.type ==  "mousemove" ){
+  			var rot_dx = 180 * d3.event.sourceEvent.movementX/width;
+  			var rot_dy = -180 * d3.event.sourceEvent.movementY/height;
+  			var rot_origin = projection.rotate();
+  			projection.rotate([rot_dx+rot_origin[0], rot_dy+rot_origin[1], rot_origin[2]]);
+  		}
+  		render();
+  	}
+
+	d3.select(canvas).call(zoom);
+
+	render();
+
+	function render(){
+		ctx.fillStyle = "white";
+		ctx.fillRect(0, 0, width, height);
+
+		ctx.strokeStyle = "#777";
+		ctx.lineWidth = 0.5;
+		ctx.beginPath();
+		path(grid);
+		ctx.stroke();
+		
+		ctx.strokeStyle = "#000";
+		ctx.lineWidth = 2;
+		ctx.beginPath();
+		ctx.arc(width/2, height/2, 200*transform.k, 0, Math.PI*2);
+		ctx.stroke();
+		
+		//填充各国
+		georoot.features.forEach(function(d,i){
+			ctx.fillStyle = color(i);
+			ctx.beginPath();
+			path(d);
+			ctx.fill();
+		});
+
+		//描边各国
+		ctx.strokeStyle = "rgba(0,0,0,0.5)";
+		ctx.lineWidth = 0.5;
+		ctx.beginPath();
+		georoot.features.forEach(function(d,i){
+			path(d);
+		});
+		ctx.stroke();
+	}
+
+});
+
+
+</script>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<canvas width="980" height="600"></canvas>
+<script src="../../d3/4.x/d3.min.js"></script>
+<script>
+
+var canvas = document.querySelector("canvas");
+var ctx = canvas.getContext("2d");
+var width = canvas.width;
+var height = canvas.height;
+
+d3.csv("data.csv", function(err, data){
+
+	if(err)	console.log(err);
+
+
+	// 转换 csv 格式为 JSON 层级结构
+	var stratify = d3.stratify()
+	    .id(function(d) { return d.name; })
+	    .parentId(function(d) { return d.parent; });
+
+	var root = stratify(data);
+
+
+	// 调用布局，计算节点位置
+	var tree = d3.tree()
+		.size([360, 150]);
+
+	tree(root);
+
+	var nodes = root.descendants();
+	var links = [];
+
+	var nodePath = nodes[9].path(nodes[5]);
+	console.log(nodePath);
+	nodes = nodePath;
+	for(var i=0; i<nodes.length-1; i++){
+		links.push({
+			source: nodes[i],
+			target: nodes[i+1]
+		});
+	}
+
+
+	// 绘制连线
+	var translate = [300,300];		//平移量
+	ctx.strokeStyle = "black";		//连线颜色
+	ctx.lineWidth = 1;				//连线宽度
+	links.forEach(function(d,i){
+		var source = project(d.source.x, d.source.y);
+		var target = project(d.target.x, d.target.y);
+		ctx.beginPath();
+		ctx.moveTo( source[0] + translate[0], source[1] + translate[1] );
+		ctx.lineTo( target[0] + translate[0], target[1] + translate[1] );
+		ctx.stroke();
+	});
+
+
+	// 绘制节点
+	var color = d3.scaleOrdinal(d3.schemeCategory10);
+	ctx.textAlign = "center";
+	ctx.font = "12px simsun";
+	nodes.forEach(function(d, i){
+
+		var node = project(d.x, d.y);
+		ctx.fillStyle = color(d.id);
+		if( !d.children ){
+			ctx.fillStyle = d3.color(color(d.parent.id)).brighter(4);
+		}
+
+		ctx.beginPath();
+		ctx.arc(node[0] + translate[0], node[1] + translate[1], 15, 0, Math.PI*2 );
+
+		ctx.fill();
+		ctx.stroke();
+
+		ctx.fillStyle = "black";
+		ctx.fillText(d.id, node[0]+ translate[0], node[1]+30+ translate[1]);
+	});
+
+
+
+
+	function project(x, y) {
+	  var angle = (x - 90) / 180 * Math.PI, radius = y;
+	  return [radius * Math.cos(angle), radius * Math.sin(angle)];
+	}
+
+
+});
+
+
+</script>

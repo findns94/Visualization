@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="base64.js"></script>
+    <script type="text/javascript">
+        /*
+         * @description: read local text file via the html5 FileReader
+         **/
+
+        function getFileContent(fileInput, callback) {
+            if (fileInput.files && fileInput.files.length > 0 && fileInput.files[0].size > 0) {
+                var file = fileInput.files[0];
+                alert(file);
+                if (window.FileReader) {
+                    var reader = new FileReader();
+
+                    reader.onloadend = function(evt) {
+                        if (evt.target.readyState == FileReader.DONE) {
+
+                            callback(evt.target.result.split(',')[1]);
+                        }
+                    };
+
+                    reader.readAsText(file,'utf-8');
+                }
+            }
+        }
+
+
+
+        $(function() {
+            $('#b1').click(function() {
+                // please do not use $('f1') to get the file dom element, otherwise, you'll get a js error.
+                getFileContent(document.getElementById('f1'), function(str) {
+//                    alert(decode64(str));
+                    alert(str);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <input type="file" id="f1" />
+    <input type="button" id="b1" value="read" />
+</body>
+</html>

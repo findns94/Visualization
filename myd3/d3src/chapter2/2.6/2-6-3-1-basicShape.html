@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<canvas id="mycanvas" width="960" height="600"></canvas>
+<script>
+
+var canvas = document.getElementById("mycanvas");
+var ctx = canvas.getContext("2d");
+var width = canvas.width;
+var height = canvas.height;
+
+// 1. 线段
+ctx.save();
+ctx.strokeStyle = "black";
+ctx.lineWidth = 5;
+ctx.beginPath();
+ctx.moveTo(10, 10);
+ctx.lineTo(100, 100);
+ctx.stroke();
+ctx.restore();
+
+// 2. 矩形
+ctx.save();
+ctx.strokeStyle = "black";
+ctx.fillStyle = "yellow";
+ctx.lineWidth = 5;
+ctx.rect(140,10,100,90);
+ctx.fill();
+ctx.stroke();
+ctx.restore();
+
+// 3. 圆
+ctx.save();
+ctx.fillStyle = "green";
+ctx.beginPath();
+ctx.arc(320, 55, 50, 0, Math.PI*2);
+ctx.fill();
+ctx.restore();
+
+// 4. 多边形
+ctx.save();
+ctx.strokeStyle = "black";
+ctx.fillStyle = "pink";
+ctx.lineWidth = 3;
+ctx.beginPath();
+ctx.moveTo(440, 10);
+ctx.lineTo(490, 50);
+ctx.lineTo(465, 100);
+ctx.lineTo(415, 100);
+ctx.lineTo(390, 50);
+ctx.closePath();
+ctx.fill();
+ctx.stroke();
+ctx.restore();
+
+// 5. 曲线
+// 二次贝塞尔曲线
+ctx.save();
+ctx.strokeStyle = "black";
+ctx.lineWidth = 5;
+ctx.beginPath();
+ctx.moveTo(10, 200);
+ctx.quadraticCurveTo(60,110,150,200);
+ctx.stroke();
+ctx.restore();
+
+
+// 三次贝塞尔曲线
+ctx.save();
+ctx.strokeStyle = "black";
+ctx.lineWidth = 5;
+ctx.beginPath();
+ctx.moveTo(250, 200);
+ctx.bezierCurveTo(330,110,400,280,500,200);
+ctx.stroke();
+ctx.restore();
+
+</script>
+</html>

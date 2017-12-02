@@ -1,0 +1,454 @@
+﻿<html>
+<head>
+    <meta charset="utf-8">
+    <title>12.5.1 开关</title>
+    <style>
+
+        .node circle {
+            cursor: pointer;
+            fill: #fff;
+            stroke: steelblue;
+            stroke-width: 2px;
+        }
+
+        .node rect {
+            cursor: pointer;
+            fill: #fff;
+            stroke: steelblue;
+            stroke-width: 2px;
+        }
+
+        .node text {
+            font-size: 12px;
+        }
+
+        /*指定连线的外观*/
+        .link {
+            fill: none;
+            stroke: steelblue;
+            stroke-width: 3px;
+        }
+
+    </style>
+</head>
+<body>
+<div>
+    <button id="top-direction" class="btn btn-md btn-primary" onclick="">top</button>
+    <button id="left-direction" class="btn btn-md btn-primary" onclick="">left</button>
+    <button id="bottom-direction" class="btn btn-md btn-primary" onclick="">bottom</button>
+    <button id="right-direction" class="btn btn-md btn-primary" onclick="">right</button>
+</div>
+
+<script src="../../d3/3.x/d3.min.js" charset="utf-8"></script>
+<script src="jquery-3.1.1.js"></script>
+<script>
+
+    function orientGraph(orientation, width, height) {
+
+        console.log(orientation);
+
+        //边界空白
+        var padding = {left: 80, right: 80, top: 90, bottom: 60};
+
+        var svg = d3.select("body")
+            .append("svg")
+            .attr("width", width + padding.left + padding.right)
+            .attr("height", height + padding.top + padding.bottom)
+            .append("g")
+            .attr("transform", "translate(" + padding.left + "," + padding.top + ")");
+
+        //树状图布局
+        var tree = d3.layout.tree()
+            .size([width, height]);
+
+        //对角线生成器
+        var diagonal = d3.svg.diagonal()
+            .projection(function (d) {
+                return [orientation.x(d), orientation.y(d)];//改变方向
+            });
+
+        // 定义tooltip,在svg上加上class g的标签
+        var tooltip = svg.append("g")
+            .attr("class", "tooltip")
+            .style("display", "none");
+
+        tooltip.append("text")
+            .attr("x", 15)
+            .attr("dy", "1.2em")
+            .style("font-size", "1.25em")
+            .attr("font-weight", "bold");
+
+        function mouseover() {
+            tooltip.style("display", null);
+        }
+
+        function mouseout() {
+            tooltip.style("display", "none");
+        }
+
+        function clickcancel() {
+            var event = d3.dispatch('click', 'dblclick');
+
+            function cc(selection) {
+                var down,
+                    tolerance = 5,
+                    last,
+                    wait = null;
+
+                // euclidean distance
+                function dist(a, b) {
+                    return Math.sqrt(Math.pow(a[0] - b[0], 2), Math.pow(a[1] - b[1], 2));
+                }
+
+                selection.on('mousedown', function () {
+                    down = d3.mouse(document.body);
+                    last = +new Date();
+                });
+                selection.on('mouseup', function () {
+                    if (dist(down, d3.mouse(document.body)) > tolerance) {
+                        return;
+                    } else {
+                        if (wait) {
+                            window.clearTimeout(wait);
+                            wait = null;
+                            event.dblclick(d3.event);
+                        } else {
+                            wait = window.setTimeout((function (e) {
+                                return function () {
+                                    event.click(e);
+                                    wait = null;
+                                };
+                            })(d3.event), 300);
+                        }
+                    }
+                });
+            }
+
+            return d3.rebind(cc, event, 'on');
+        }
+
+        var cc = clickcancel();
+
+        d3.json("electronic.json", function (error, root) {
+
+            //给第一个节点添加初始坐标x0和x1
+            //树状图一开始坐标在左上角
+            root.x0 = 0;
+            root.y0 = 0;
+
+
+            //以第一个节点为起始节点，重绘
+            redraw(root);
+
+            //重绘函数
+            function redraw(source) {
+
+                /*
+                （1） 计算节点和连线的位置
+                */
+
+                //应用布局，计算节点和连线
+                var nodes = tree.nodes(root);
+                var links = tree.links(nodes);
+
+                //重新计算节点的y坐标
+                nodes.forEach(function (d) {
+                    d.y = d.depth * 180 + 30;
+                });
+
+                /*
+                （2） 节点的处理
+                */
+
+                //获取节点的update部分
+                var nodeUpdate = svg.selectAll(".node")
+                    .data(nodes, function (d) {
+                        return d.name;
+                    });
+
+                //获取节点的enter部分
+                var nodeEnter = nodeUpdate.enter();
+
+                //获取节点的exit部分
+                var nodeExit = nodeUpdate.exit();
+
+                //1. 节点的 Enter 部分的处理办法
+                var enterNodes = nodeEnter.append("g")
+                    .attr("class", "node")
+                    .attr("transform", function (d) {
+                        return "translate(" + orientation.x0(source) + "," + orientation.y0(source) + ")";//改变方向
+                    })
+                    .on("click", function (d) {
+                        toggle(d);
+                        redraw(d);
+                    })
+                    .on("mouseover", mouseover)//定义鼠标移到圆形上的操作
+                    .on("mouseout", mouseout)
+                    .on("mousemove", function (d) {
+                        //获取矩形的偏移坐标
+                        var xPos = orientation.x(d) - 50;
+                        var yPos = orientation.y(d) - 45;
+                        tooltip.attr("transform", "translate(" + xPos + "," + yPos + ")");
+                        tooltip.select("text").text(d.name);
+                    });
+
+                // 根据上下左右预留的空间调整字体大小
+                var paddingLeftRight = 18;
+                var paddingTopBottom = 8;
+
+                //双击
+                enterNodes.append("rect")
+                    .attr("width", 10)
+                    .attr("height", 8)
+                    .style("fill", function (d) {
+                        return d._children ? "lightsteelblue" : "#fff";
+                    })
+                    .call(cc)
+                    .on('dblclick', function (d) {
+                        d3.select(this)
+                            .transition()
+                            .attr("x", function (d) {
+                                return 2 * (-d.bb.width / 2 - paddingLeftRight / 2);
+                            })
+                            .attr("y", function (d) {
+                                return 2 * (-d.bb.height + paddingTopBottom / 2);
+                            })
+                            .attr("width", function (d) {
+                                return 2 * (d.bb.width + paddingLeftRight);
+                            })
+                            .attr("height", function (d) {
+                                return 2 * (d.bb.height + paddingTopBottom);
+                            });
+
+                        //change next text element size
+                        var textElement = d3.select(this.nextSibling);
+                        textElement.text(function (d) {
+                            return d.name;
+                        })
+                            .transition()
+                            .style("font-size", function (d) {
+                                return 1.4 * (d.bb.height + paddingTopBottom);
+                            });
+
+                    });
+
+                enterNodes.append("text")
+                    .attr("dy", ".35em")
+                    .text(function (d) {
+                        return d.name;
+                    })
+                    .style("fill-opacity", function (d) {
+                        d.bb = this.getBBox();
+                        return 0;
+                    })
+                    .attr("text-anchor", "middle");
+
+
+                //2. 节点的 Update 部分的处理办法
+                var updateNodes = nodeUpdate.transition()
+                    .duration(500)
+                    .attr("transform", function (d) {
+                        return "translate(" + orientation.x(d) + "," + orientation.y(d) + ")";//改变方向
+                    });
+
+                updateNodes.select("text")
+                    .style("fill-opacity", 1)
+                    //                .transition()
+                    .style("font-size", function (d) {
+                        return 12;
+                    })
+                    .text(function (d) {
+                        return d.name;
+                    });
+
+
+                updateNodes.select("rect")
+                    .attr("x", function (d) {
+                        return -d.bb.width / 2 - paddingLeftRight / 2;
+                    })
+                    .attr("y", function (d) {
+                        return -d.bb.height + paddingTopBottom / 2;
+                    })
+                    .attr("width", function (d) {
+                        return d.bb.width + paddingLeftRight;
+                    })
+                    .attr("height", function (d) {
+                        return d.bb.height + paddingTopBottom;
+                    })
+                    .style("fill", function (d) {
+                        return d._children ? "lightsteelblue" : "#fff";
+                    });
+
+
+                //3. 节点的 Exit 部分的处理办法
+                var exitNodes = nodeExit.transition()
+                    .duration(500)
+                    .attr("transform", function (d) {
+                        return "translate(" + orientation.x(source) + "," + orientation.y(source) + ")";//改变方向
+                    })
+                    .remove();
+
+                exitNodes.select("rect")
+                    .attr("width", 0)
+                    .attr("height", 0);
+
+                exitNodes.select("text")
+                    .style("fill-opacity", 0);
+
+                /*
+                （3） 连线的处理
+                */
+
+                //获取连线的update部分
+                var linkUpdate = svg.selectAll(".link")
+                    .data(links, function (d) {
+                        return d.target.name;
+                    });
+
+                //获取连线的enter部分
+                var linkEnter = linkUpdate.enter();
+
+                //获取连线的exit部分
+                var linkExit = linkUpdate.exit();
+
+                //1. 连线的 Enter 部分的处理办法
+                //insert，在选择集中的指定元素之前插入一个元素
+                //在style里设定样式，无法修改link连线样式
+                linkEnter.insert("path", ".node")
+                    .attr("class", "link")
+                    .attr("d", function (d) {
+                        var o = {x: source.x0, y: source.y0};
+                        return diagonal({source: o, target: o});
+                    });
+
+                //2. 连线的 Update 部分的处理办法
+                linkUpdate.transition()
+                    .duration(500)
+                    .attr("d", function (d) {
+                        var o = {x: d.source.x, y: d.source.y};
+                        var p = {x: d.target.x, y: d.target.y};
+                        return diagonal({source: o, target: p});
+                    });
+
+                //3. 连线的 Exit 部分的处理办法0
+                linkExit.transition()
+                    .duration(500)
+                    .attr("d", function (d) {
+                        var o = {x: source.x, y: source.y};
+                        return diagonal({source: o, target: o});
+                    })
+                    .remove();
+
+                /*
+                （4） 将当前的节点坐标保存在变量x0、y0里，以备更新时使用
+                */
+                nodes.forEach(function (d) {
+                    d.x0 = d.x;
+                    d.y0 = d.y;
+                });
+
+            }
+
+            //切换开关，d 为被点击的节点
+            function toggle(d) {
+                if (d.children) { //如果有子节点
+                    d._children = d.children; //将该子节点保存到 _children
+                    d.children = null;  //将子节点设置为null
+                } else {  //如果没有子节点
+                    d.children = d._children; //从 _children 取回原来的子节点
+                    d._children = null; //将 _children 设置为 null
+                }
+            }
+
+        });
+    }
+
+    var width = 1440;
+    var height = 720;
+
+    var orientations = {
+        "top-to-bottom": {
+            size: [width, height],
+            x: function (d) {
+                return d.x;
+            },
+            y: function (d) {
+                return d.y;
+            },
+            x0: function (d) {
+                return d.x0;
+            },
+            y0: function (d) {
+                return d.y0;
+            }
+        },
+        "right-to-left": {
+            size: [height, width],
+            x: function (d) {
+                return height - d.y;
+            },
+            y: function (d) {
+                return d.x;
+            },
+            x0: function (d) {
+                return height - d.y0;
+            },
+            y0: function (d) {
+                return d.x0;
+            }
+        },
+        "bottom-to-top": {
+            size: [width, height],
+            x: function (d) {
+                return d.x;
+            },
+            y: function (d) {
+                return height - d.y;
+            },
+            x0: function (d) {
+                return d.x0;
+            },
+            y0: function (d) {
+                return height - d.y0;
+            }
+        },
+        "left-to-right": {
+            size: [height, width],
+            x: function (d) {
+                return d.y;
+            },
+            y: function (d) {
+                return d.x;
+            },
+            x0: function (d) {
+                return d.y0;
+            },
+            y0: function (d) {
+                return d.x0;
+            }
+        }
+    };
+
+    $(function () {
+        $('#top-direction').click(function () {
+            d3.select("body").select("svg").remove();
+            orientGraph(orientations["top-to-bottom"], width, height);
+        });
+        $('#left-direction').click(function () {
+            d3.select("body").select("svg").remove();
+            orientGraph(orientations["left-to-right"], height, height);
+        });
+        $('#bottom-direction').click(function () {
+            d3.select("body").select("svg").remove();
+            orientGraph(orientations["bottom-to-top"], width, height);
+        });
+        $('#right-direction').click(function () {
+            d3.select("body").select("svg").remove();
+            orientGraph(orientations["right-to-left"], height, height);
+        })
+    });
+
+</script>
+
+</body>
+</html>  

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery-3.1.1.js"></script>
+    <script src="d3.min.js"></script>
+
+    <style media="screen">
+        #item {
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+        #item:hover, #item:focus {
+            background-color: #3E8E41;
+        }
+        .menu {
+            position: relative;
+            display: inline-block;
+        }
+        #submenu {
+            display: none;
+            position: absolute;
+            background-color: #3E8E41;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        }
+        #submenu a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        #submenu a:hover {
+            background-color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <p>lorem epsium</p>
+    <div class="menu">
+        <div id="item">Dropdown</div>
+        <div id="submenu">
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
+        </div>
+    </div>
+    <p>lorem epsium</p>
+    <p>lorem epsium</p>
+    <p>lorem epsium</p>
+</body>
+<script>
+    $(function () {
+        $("#item").click(function () {
+            $("#submenu").slideToggle(500);
+        })
+    });
+
+    $(function () {
+//        var paragraphs = document.getElementsByTagName("p");
+//        for (var i = 0; i < paragraphs.length; i++) {
+//            var paragraph = paragraphs.item(i);
+//            paragraph.style.setProperty("color", "white", null);
+//        }
+
+//        d3.selectAll("p").style("color", "white");
+
+        d3.selectAll("p").style("color", function() {
+            return "hsl(" + Math.random() * 360 + ",100%,50%)";
+        });
+
+//        d3.selectAll("p").style("color", function(d, i) {
+//            alert("fuck!");
+//            console.log("fuck!!!!");
+//            if (i%2==0){
+//                return "hsl(" + Math.random() * 360 + ",100%,50%)";
+//            }
+//            else{
+//                return "#4ef";
+//            }
+//            return i % 2 ? "#aaa" : "#4fe";
+//        });
+
+//        d3.selectAll("p")
+//            .data([4, 8, 15, 16, 23, 42])
+//            .style("font-size", function(d) { return d + "px"; });
+
+        d3.select("body").style("background-color", "black");
+    });
+
+</script>
+</html>

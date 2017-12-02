@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<canvas width="960" height="600"></canvas>
+<!--<script src="https://d3js.org/d3.v3.min.js"></script>-->
+<script src="../../d3/4.x/d3.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script>
+
+var canvas = document.querySelector("canvas");
+var ctx = canvas.getContext("2d");
+var width = canvas.width;
+var height = canvas.height;
+
+var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+console.log(color(1));  // #1f77b4
+console.log(color(2));  // #ff7f0e
+console.log(color(3));  // #2ca02c
+
+var colorScheme_1 = d3.scaleOrdinal(d3.schemeAccent);
+
+for(var i=0;i<8;i++){
+  ctx.fillStyle = colorScheme_1(i);
+  ctx.fillRect(i*50,50,50,50);
+}
+
+var colorScheme_2 = d3.scaleSequential(d3.interpolateRdBu);
+
+for(var i=0;i<100;i++){
+  ctx.fillStyle = colorScheme_2(i/100);
+  ctx.fillRect(i*5,150,5,50);
+}
+
+console.log(colorScheme_2(0));
+console.log(colorScheme_2(0.5));
+console.log(colorScheme_2(1));
+
+var red    = d3.interpolateRdBu(0);
+var redblue = d3.interpolateRdBu(0.5);
+var blue   = d3.interpolateRdBu(1.0);
+console.log(red);
+console.log(redblue);
+console.log(blue);
+
+
+
+var b0 = d3.interpolateBlues(0);
+var b1 = d3.interpolateBlues(0.5);
+var b2 = d3.interpolateBlues(1);
+console.log(b0);
+console.log(b1);
+console.log(b2);
+
+
+/*
+d3.js v3.0
+var color = d3.scale.category10();
+color(1);  // #1f77b4
+color(2);  // #ff7f0e
+color(3);  // #2ca02c
+*/
+
+</script>

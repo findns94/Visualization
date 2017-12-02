@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh">  
+<head>
+	<meta charset="utf-8">  
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<meta name="description" content="">
+	<link rel="stylesheet" href="./leaflet.css" />
+<style>
+#mapid { 
+	margin: auto;
+	width: 1000px;
+	height: 480px; 
+}
+</style>
+</head> 
+<body>
+<div id="mapid"></div>
+<script src="./leaflet.js"></script>
+<script>
+var mymap = L.map('mapid').setView([37, 110], 5);
+
+L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibHpobHp6IiwiYSI6ImNpdXh6cGt5ZzA0Y2UyenBkdmR3dWh3M3YifQ.uXyfly-JCXmgin5uDlnL5g', {
+    maxZoom: 18
+}).addTo(mymap);
+
+var bj_marker = L.marker([39, 116])
+    .addTo(mymap);
+
+var sh_marker = L.marker([31, 121])
+    .addTo(mymap);
+
+var circle = L.circle([30, 114], {
+    color: 'blue',
+    fillColor: '#f03',
+    fillOpacity: 0.5,
+    radius: 100000
+}).addTo(mymap);
+
+circle.bindPopup("这里是武汉！");
+
+var polygon = L.polygon([
+    [34, 108],
+    [30, 104],
+    [29, 106]
+]).addTo(mymap);
+
+
+</script>
+</body>
+</html>

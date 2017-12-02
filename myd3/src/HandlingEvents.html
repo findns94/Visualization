@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery-3.1.1.js"></script>
+
+</head>
+<body>
+    <div id="demo">Click Me</div>
+    <p>Click Me</p>
+</body>
+<script>
+    $(function () {
+        $("p").on("click", function () {
+            alert("clicked");
+        });
+    });
+
+    $(function() {
+        $("#demo").click(function () {
+            $("#demo").text(Date());
+        });
+    });
+</script>
+</html>

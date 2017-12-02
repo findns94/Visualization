@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<canvas id="mycanvas" width="960" height="600"></canvas>
+<svg width="300" height="300"></svg>
+<script src="../../d3/4.x/d3.min.js"></script>
+<script src="./js/topojson.js"></script>
+<script>
+
+var canvas = document.getElementById("mycanvas");
+var ctx = canvas.getContext("2d");
+var width = canvas.width;
+var height = canvas.height;
+
+var img = new Image();
+img.src = "./data/southchinasea_yellow.png";
+img.onload = function(){
+	ctx.drawImage(img, 710, 440);
+}
+
+var projection = d3.geoMercator()
+		.center([107, 31])
+		.scale(650)
+    	.translate([width/1.9, height/1.6]);
+	
+var path = d3.geoPath()
+	.projection(projection)
+	.context(ctx);
+	
+var color = d3.scaleOrdinal(d3.schemeCategory20c);
+
+
+var pos = [
+	{name:"北京", loc:[116,39], color: "#FF8585"},
+	{name:"上海", loc:[121,31], color: "#FFA142"},
+	{name:"广州", loc:[113,23], color: "#FFFF42"},
+	{name:"昆明", loc:[102,24], color: "#42FF42"},
+	{name:"西安", loc:[108,34], color: "#42FFFF"},
+	{name:"武汉", loc:[114,30], color: "#4242FF"},
+	{name:"乌鲁木齐", loc:[87,43], color: "#C285FF"},
+	{name:"拉萨", loc:[91,29], color: "#FF85FF"}
+];
+
+	
+d3.json("./data/china.topojson", function(error, toporoot) {
+	if (error) 
+		return console.error(error);
+	
+	//将TopoJSON对象转换成GeoJSON，保存在georoot中
+	var georoot = topojson.feature(toporoot,toporoot.objects.china);
+
+
+	var attacks = [];
+
+	setInterval(function(){
+		render();
+		if(Math.random()<0.2){
+			var at = new Attack();
+			at.canvas(ctx);
+			var ns = Math.floor(Math.random()*pos.length);
+			var ne = Math.floor(Math.random()*pos.length);
+			at.init(pos[ns].loc, pos[ne].loc, projection);
+			at.setColor(pos[ne].color);
+			attacks.push(at);
+		}
+
+
+		for(var i=attacks.length-1; i>=0; i--){
+			attacks[i].render();
+			attacks[i].update();
+			if( attacks[i].isEnd ){
+				attacks.splice( i, 1 );
+			}
+		}
+
+	}, 33);
+	
+	function render(){
+		ctx.fillStyle = "rgba(0,0,0,0.2)";
+		ctx.fillRect(0, 0, width, height);
+
+		//描边各区域
+		ctx.strokeStyle = "rgba(255,255,0,0.2)";
+		ctx.lineWidth = 1;
+		ctx.beginPath();
+		georoot.features.forEach(function(d){
+			path(d);
+		});
+		ctx.stroke();
+
+		//绘制地点
+		pos.forEach( function(d, i) {
+			ctx.fillStyle = d.color;
+			ctx.strokeStyle = "white";
+			var pp = projection(d.loc);
+			ctx.beginPath();
+			ctx.arc(pp[0], pp[1], 7, 0, Math.PI*2);
+			ctx.fill();
+			ctx.stroke();
+		});
+
+		//绘制南海诸岛
+		ctx.drawImage(img, 710, 440);
+	}
+
+
+});
+
+
+
+function Attack(){
+
+	var start = [0, 0];		//起点经纬度
+	var end = [0, 0];		//终点经纬度
+	var projection;			//投影函数
+	var ctx;				//Canvas上下文
+	var color;				//颜色
+	var current = [0, 0];	//当前位置
+	this.isEnd = false;		//是否已经到达终点
+
+	// 初始化
+	// 参数：
+	// s - 起点经纬度
+	// e - 终点经纬度
+	// p - 投影函数
+	this.init = function(s, e, p){
+		start = s;
+		end = e;
+		projection = p;
+		current[0] = s[0];
+		current[1] = s[1];
+	}
+
+	// 设置canvas上下文
+	this.canvas = function(c){
+		ctx = c;
+	}
+
+	// 设置颜色
+	this.setColor = function(cl){
+		color = cl;
+	}
+
+	// 渲染方法
+	this.render = function(){
+		var cp = projection(current);
+		ctx.save();
+		ctx.fillStyle = color;
+		ctx.beginPath();
+		ctx.arc(cp[0], cp[1], 5.5, 0, Math.PI*2);
+		ctx.fill();
+		ctx.restore();
+	}
+
+	// 更新流星的位置
+	this.update = function(){
+		if( !this.isEnd && dis(current, end) > 0.1 ){
+			current[0] += (end[0] - start[0])*0.02;
+			current[1] += (end[1] - start[1])*0.02;
+		}else{
+			this.isEnd = true;
+		}
+	}
+
+	//计算两点间距离
+	function dis(a, b){
+		return Math.sqrt((a[0]-b[0])*(a[0]-b[0]) + (a[1]-b[1])*(a[1]-b[1]));
+	}
+
+}
+
+
+</script>
+</html>

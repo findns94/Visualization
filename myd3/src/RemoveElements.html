@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery-3.1.1.js"></script>
+
+    <style media="screen">
+        div {
+            background-color: aqua;
+            width: 300px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <p style="color: red;">Red</p>
+        <p style="color: green;">Green</p>
+        <p style="color: blue;">Blue</p>
+    </div>
+</body>
+<script>
+    $(function () {
+//        $("p").eq(1).remove();
+        $("div").empty();
+    });
+</script>
+
+</html>

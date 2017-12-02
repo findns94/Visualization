@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<canvas width="980" height="600"></canvas>
+<script src="../../d3/4.x/d3.min.js"></script>
+<script>
+
+var canvas = document.querySelector("canvas");
+var ctx = canvas.getContext("2d");
+var width = canvas.width;
+var height = canvas.height;
+
+
+var data = [];
+
+for(var i=0; i<100; i++){
+	data.push({r: 10+Math.random()*20});
+}
+
+var nodes = d3.packSiblings(data);
+
+ctx.fillStyle = "steelblue";
+for (var i = nodes.length - 1; i >= 0; i--) {
+	ctx.beginPath();
+	ctx.arc( nodes[i].x + 300, nodes[i].y +300, nodes[i].r,
+		0, Math.PI*2 );
+	ctx.fill();
+}
+
+var outerCircle = d3.packEnclose(data);
+
+
+ctx.beginPath();
+ctx.arc( outerCircle.x + 300, outerCircle.y +300, outerCircle.r,
+	0, Math.PI*2 );
+ctx.stroke();
+
+
+</script>

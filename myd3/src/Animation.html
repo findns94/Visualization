@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery-3.1.1.js"></script>
+
+    <style media="screen">
+        div {
+            background: orange;
+            height: 80px;
+            width: 80px;
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div></div>
+</body>
+<script>
+    $(function () {
+        var div = $("div");
+        div.animate({opacity: 1});
+        div.animate({height: '+=100px', width: '+=100px', top: '+=100px'}, 500);
+        div.animate({height: '-=100px', width: '-=100px', left: '+=100px'}, 500);
+        div.animate({height: '+=100px', width: '+=100px', top: '-=100px'}, 500);
+        div.animate({height: '-=100px', width: '-=100px', left: '-=100px'}, 500);
+        div.animate({opacity: 0.5});
+    })
+</script>
+</html>

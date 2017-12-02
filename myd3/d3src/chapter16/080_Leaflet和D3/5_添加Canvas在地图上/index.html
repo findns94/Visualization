@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh">  
+<head>
+	<meta charset="utf-8">  
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<meta name="description" content="">
+	<link rel="stylesheet" href="./leaflet.css" />
+<style>
+#mapid { 
+	margin: auto;
+	width: 1000px;
+	height: 480px; 
+}
+</style>
+</head> 
+<body>
+<div id="mapid"></div>
+<script src="../../../d3/4.x/d3.min.js"></script>
+<script src="./topojson.js"></script>
+<script src="./leaflet.js"></script>
+<script>
+var mymap = L.map('mapid',{
+	renderer: L.canvas()
+}).setView([37, 110], 4);
+
+d3.json("./china.topojson",function(error, root){
+
+	var georoot = topojson.feature(root, root.objects.china);
+
+	L.geoJSON(georoot, {
+		style: {
+			color:"purple",	//线颜色
+			weight: 2,		//线宽
+			fillColor: "yellow"	//填充颜色
+		}
+	}
+	).addTo(mymap);
+
+
+	//var canvas = mapid.getElementsByTagName("canvas")[0];
+	var canvas = d3.select("#mapid").select("canvas");
+	var ctx = canvas.node().getContext("2d");
+
+	var points = [
+	{ lat: 37 , lng:110 },
+	{ lat: 27 , lng: 100 }];
+
+
+	function drawPoints(radius){
+
+		for(var i=0;i<points.length;i++){
+
+			var pos = mymap.latLngToLayerPoint([points[i].lat, points[i].lng]);
+
+			ctx.beginPath();
+			ctx.fillStyle = "blue";
+			ctx.arc(pos.x, pos.y, radius, 0, 2*Math.PI );
+			ctx.fill();
+		}
+
+	}
+
+	//当地图更新的时候
+	mymap.on("moveend", update);
+
+	var initRadius = 10;
+	var initZoom = mymap.getZoom();
+ 
+	update();
+ 
+	function update() {
+
+		var curZoom = mymap.getZoom();
+
+		var curRadius = curZoom * initRadius / initZoom;
+
+		drawPoints(curRadius);
+	} 
+
+});
+
+
+
+</script>
+</body>
+</html>

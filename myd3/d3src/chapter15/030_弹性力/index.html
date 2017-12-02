@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<canvas width="960" height="600"></canvas>
+<script src="../../d3/4.x/d3.min.js"></script>
+<script>
+
+var canvas = document.querySelector("canvas");
+var ctx = canvas.getContext("2d");
+var width = canvas.width;
+var height = canvas.height;
+
+var simulation = d3.forceSimulation()
+    .force("charge", d3.forceManyBody())
+    .force("center", d3.forceCenter(width/2,height/2));
+
+var nodes = [
+{ id: 1000, color:"red"},
+{ id: 1001, color:"orange"},
+{ id: 1002, color:"yellow"},
+{ id: 1003, color:"green"},
+{ id: 1004, color:"cyan"},
+{ id: 1005, color:"blue"}
+];
+
+
+var links = [
+{ source: 1000, target: 1001},
+{ source: 1001, target: 1002},
+{ source: 1002, target: 1003},
+{ source: 1003, target: 1004},
+{ source: 1004, target: 1005},
+{ source: 1005, target: 1000}
+];
+
+console.log(links);
+
+
+simulation.nodes(nodes)
+  .on("tick", ticked);
+
+simulation.force("link", 
+  d3.forceLink()
+    .links(links)
+    .id(function(d) { return d.id; })
+    .distance(300)
+);
+
+function ticked() {
+    ctx.clearRect(0, 0, width, height);
+
+    links.forEach(function(link){
+      ctx.beginPath();
+      ctx.strokeStyle = link.source.color;
+      ctx.moveTo(link.source.x, link.source.y);
+      ctx.lineTo(link.target.x, link.target.y);
+      ctx.stroke();
+    });
+
+    nodes.forEach(function(node){
+      ctx.beginPath();
+      ctx.fillStyle = node.color;
+      ctx.arc(node.x,node.y,20,0,2*Math.PI);
+      ctx.fill();
+    });
+
+}
+
+</script>
