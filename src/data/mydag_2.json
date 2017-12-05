@@ -1,0 +1,65 @@
+{
+  "nodes": [
+    {
+      "title": "new concept",
+      "id": 0,
+      "x": 737,
+      "y": 361,
+      "isclick": false
+    },
+    {
+      "title": "new concept",
+      "id": 1,
+      "x": 742,
+      "y": 151,
+      "isclick": false
+    },
+    {
+      "id": 2,
+      "title": "new concept",
+      "x": 730.7271728515625,
+      "y": 561.545654296875,
+      "isclick": false
+    },
+    {
+      "id": 3,
+      "title": "new concept",
+      "x": 727.36474609375,
+      "y": 781.8599853515625,
+      "isclick": false
+    },
+    {
+      "id": 4,
+      "title": "new concept",
+      "x": 725.6829223632812,
+      "y": 993.765869140625,
+      "isclick": false
+    }
+  ],
+  "edges": [
+    {
+      "source": 1,
+      "target": 0,
+      "eid" : "aa",
+      "code": "    public static BankAccount[] accounts;\n"
+    },
+    {
+      "source": 0,
+      "target": 2,
+      "eid" : "bb",
+      "code": "    public static Random Bank_random = new Random(1L);\n"
+    },
+    {
+      "source": 2,
+      "target": 3,
+      "eid" : "cc",
+      "code": "   int NUM_ACCOUNTS = 2;\n"
+    },
+    {
+      "source": 3,
+      "target": 4,
+      "eid" : "dd",
+      "code": "    public Account() {\n"
+    }
+  ]
+}

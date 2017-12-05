@@ -9,6 +9,8 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
         thisGraph.nodes = nodes || [];
         thisGraph.edges = edges || [];
 
+        thisGraph.codes = "asfasf \n asfasf";
+
         thisGraph.state = {
             selectedNode: null,
             selectedEdge: null,
@@ -137,6 +139,8 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
                 var uploadFile = this.files[0];
                 var filereader = new window.FileReader();
 
+                thisGraph.codes = "";
+
                 filereader.onload = function () {
                     var txtRes = filereader.result;
                     // TODO better error handling
@@ -159,8 +163,12 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
                                 eid: e.eid,
                                 code: e.code
                             };
-                            console.log(newEdges[i]);
+                            thisGraph.codes += e.code;
+                            // console.log(e.code);
+                            // console.log(newEdges[i]);
                         });
+                        console.log(thisGraph.codes);
+
                         thisGraph.edges = newEdges;
                         thisGraph.updateGraph();
                     } catch (err) {
@@ -518,7 +526,7 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
         // add new paths
         paths.enter()
             .append("path")
-            .attr("id",function (d) {
+            .attr("id", function (d) {
                 return d.eid;
             })
             .style('marker-end', 'url(#end-arrow)')
@@ -533,15 +541,17 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
             .on("mouseup", function (d) {
                 state.mouseDownLink = null;
             });
-            // .append("text")
-            // .attr("text-anchor", "middle")
-            // .attr("dy", "-" + (nwords - 1) * 7.5)
-            // .append('tspan').text("asfasfsaf");
+        // .append("text")
+        // .attr("text-anchor", "middle")
+        // .attr("dy", "-" + (nwords - 1) * 7.5)
+        // .append('tspan').text("asfasfsaf");
 
         //边上增加文字(代码)
         paths.enter()
             .append("g")
-            .attr("id", "thing")
+            .attr("id", function (d) {
+                return "#" + d.eid + "-code";
+            })
             .style("fill", "navy")
             .append("text")
             // .attr("transform", function (d) {
@@ -556,8 +566,8 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
             .attr("text-anchor", "right")
             .append("textPath")
             .attr("xlink:href", function (d) {
-                console.log(d);
-                return "#"+d.eid;
+                // console.log(d);
+                return "#" + d.eid;
             })
             .text(function (d) {
                 return d.code;
@@ -647,8 +657,13 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
         var newGs = thisGraph.circles.enter()
             .append("g");
 
+        var maxDx = -100;
+
         newGs.classed(consts.circleGClass, true)
             .attr("transform", function (d) {
+                if (d.x > maxDx) {
+                    maxDx = d.x;
+                }
                 return "translate(" + d.x + "," + d.y + ")";
             })
             .on("mouseover", function (d) {
@@ -670,7 +685,7 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
                 var thisNode = d3.select(this);
                 var circleNode = d3.select(this.children[0]);
                 var textNode = d3.select(this.children[1]);
-                console.log(circleNode);
+                console.log(d);
                 console.log(textNode);
                 textNode.text(function (d) {
                     return ""
@@ -682,14 +697,24 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
                 //     .append("pre")
                 //     .text(d.code);
                 // textNode.text("<pre>"+d.code+"</pre>");
-                circleNode
-                    .transition()
-                    .attr("r", 70);
+
+                if (d.isclick == false) {
+                    circleNode
+                        .transition()
+                        .attr("r", 70);
+                    d.isclick = true;
+                }
+                else {
+                    circleNode
+                        .transition()
+                        .attr("r", 50);
+                    d.isclick = false;
+                }
                 var textElement = d3.select(this.nextSibling);
                 console.log(textElement);
 
                 // var el = d3.select(this);
-                var words = d.code.split('\n');
+                var words = d.title.split('\n');
                 textNode.text('');
 
                 for (var i = 0; i < words.length; i++) {
@@ -716,6 +741,54 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
 
         // remove old nodes
         thisGraph.circles.exit().remove();
+
+        d3.selectAll("#code-block").remove();
+
+        maxDx += 200;
+
+        var words = thisGraph.codes.split('\n');
+
+        //切割代码
+        //TODO 加入边的id信息
+        for (var i = 0; i < words.length; i++) {
+            thisGraph.svgG
+                .append("text")
+                .style("fill", "black")
+                .style("font-size", "16px")
+                .attr("dy", ".35em")
+                .attr("id", "code-block")
+                .attr("text-anchor", "left")
+                .attr("transform", "translate(" + maxDx + "," + i * 15 + ")")
+                .text(words[i]);
+        }
+
+        // var thing = thisGraph.svgG
+        //     .append("text")
+        //     .style("fill", "black")
+        //     .style("font-size", "16px")
+        //     .attr("dy", ".35em")
+        //     .attr("id", "code-block")
+        //     .attr("text-anchor", "middle")
+        //     .attr("transform", "translate(800,0)")
+        //     .text(function () {
+        //         console.log(this);
+        //
+        //         var textNode = d3.select(this);
+        //         console.log(textNode);
+        //
+        //         var codes = thisGraph.codes;
+        //
+        //         console.log(codes);
+        //         var words = codes.split('\n');
+        //         textNode.text('');
+        //
+        //         for (var i = 0; i < words.length; i++) {
+        //             var tspan = textNode.append('tspan').text(words[i]);
+        //             if (i > 0)
+        //                 tspan.attr('x', 0).attr('dy', '15');
+        //         }
+        //     });
+
     };
 
     GraphCreator.prototype.zoomed = function () {
@@ -756,16 +829,18 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
         "import java.util.Random;\n" +
         "\n" +
         "public class Account {\n" +
-        "    public static int Bank_Total = 0;"
+        "    public static int Bank_Total = 0;",
+        isclick: false
     },
         {
             title: "new concept", id: 1, x: xLoc, y: yLoc + 200, code: "    public static BankAccount[] accounts;\n" +
-        "    public static Random Bank_random = new Random(1L);\n" +
-        "    int NUM_ACCOUNTS = 2;\n" +
-        "\n" +
-        "    public Account() {"
+            "    public static Random Bank_random = new Random(1L);\n" +
+            "    int NUM_ACCOUNTS = 2;\n" +
+            "\n" +
+            "    public Account() {",
+            isclick: false
         }];
-    var edges = [{source: nodes[1], target: nodes[0], eid: "zz",code: "    public static BankAccount[] accounts;\n"}];
+    var edges = [{source: nodes[1], target: nodes[0], eid: "zz", code: "    public static BankAccount[] accounts;\n"}];
 
 
     /** MAIN SVG **/
