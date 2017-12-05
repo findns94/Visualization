@@ -149,12 +149,17 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
                         newEdges.forEach(function (e, i) {
                             newEdges[i] = {
                                 source: thisGraph.nodes.filter(function (n) {
+                                    // console.log(e);
                                     return n.id == e.source;
                                 })[0],
                                 target: thisGraph.nodes.filter(function (n) {
                                     return n.id == e.target;
-                                })[0]
+                                })[0],
+                                //读取代码和边的id
+                                eid: e.eid,
+                                code: e.code
                             };
+                            console.log(newEdges[i]);
                         });
                         thisGraph.edges = newEdges;
                         thisGraph.updateGraph();
@@ -513,6 +518,9 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
         // add new paths
         paths.enter()
             .append("path")
+            .attr("id",function (d) {
+                return d.eid;
+            })
             .style('marker-end', 'url(#end-arrow)')
             .classed("link", true)
             .attr("d", function (d) {
@@ -525,6 +533,59 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
             .on("mouseup", function (d) {
                 state.mouseDownLink = null;
             });
+            // .append("text")
+            // .attr("text-anchor", "middle")
+            // .attr("dy", "-" + (nwords - 1) * 7.5)
+            // .append('tspan').text("asfasfsaf");
+
+        //边上增加文字(代码)
+        paths.enter()
+            .append("g")
+            .attr("id", "thing")
+            .style("fill", "navy")
+            .append("text")
+            // .attr("transform", function (d) {
+            //     var path = d3.select("#"+d.eid);
+            //     // console.log(path.node().getBBox());
+            //     var x = path.node().getBBox().x*2;
+            //     var y = -path.node().getBBox().y;
+            //     return "translate("+x+","+y+") rotate(90)"
+            // })
+            .attr("dy", "20")
+            .style("font-size", "10px")
+            .attr("text-anchor", "right")
+            .append("textPath")
+            .attr("xlink:href", function (d) {
+                console.log(d);
+                return "#"+d.eid;
+            })
+            .text(function (d) {
+                return d.code;
+            })
+            .on("click", function (d) {
+                console.log(d.code);
+            });
+
+
+        // var thing = thisGraph.svgG.append("g")
+        //     .attr("id", "thing")
+        //     .style("fill", "navy")
+        //     ;
+        //
+        // thing.append("text")
+        //     .attr("transform", function () {
+        //         var path = d3.select("#zz");
+        //         // console.log(path.node().getBBox());
+        //         var x = path.node().getBBox().x*2;
+        //         var y = -path.node().getBBox().y;
+        //         return "translate("+x+","+y+") rotate(90)"
+        //     })
+        //     .style("font-size", "10px")
+        //     .attr("text-anchor", "middle")
+        //     .append("textPath")
+        //     .attr("xlink:href", "#zz")
+        //     .text("Wavy text is the gimmick for many years to come (d3)");
+
 
         // remove old links
         paths.exit().remove();
@@ -636,6 +697,7 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
                     if (i > 0)
                         tspan.attr('x', 0).attr('dy', '15');
                 }
+
                 // .attr("transform", "translate(" + padding.left + "," + padding.top + ")")
                 // .transition()
                 // .attr("x", function(d) { return 2*(- d.bb.width/2 - paddingLeftRight/2); })
@@ -703,7 +765,7 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
         "\n" +
         "    public Account() {"
         }];
-    var edges = [{source: nodes[1], target: nodes[0]}];
+    var edges = [{source: nodes[1], target: nodes[0], eid: "zz",code: "    public static BankAccount[] accounts;\n"}];
 
 
     /** MAIN SVG **/
