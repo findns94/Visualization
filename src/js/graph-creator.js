@@ -9,7 +9,7 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
         thisGraph.nodes = nodes || [];
         thisGraph.edges = edges || [];
 
-        thisGraph.codes = "asfasf \n asfasf";
+        thisGraph.codes = "public static void main(String[] args) throws IOException { \n String a=\"aaa\"; \n";
 
         thisGraph.state = {
             selectedNode: null,
@@ -750,6 +750,12 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
 
         //切割代码
         //TODO 加入边的id信息
+
+        //fuying
+        d3.select("body")
+            .append("div")
+            .attr("id","codelinediv");
+        var codelinediv=d3.select("#codelinediv");
         for (var i = 0; i < words.length; i++) {
             thisGraph.svgG
                 .append("text")
@@ -760,7 +766,28 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
                 .attr("text-anchor", "left")
                 .attr("transform", "translate(" + maxDx + "," + i * 15 + ")")
                 .text(words[i]);
+            codelinediv.append("pre")
+                .on("click", function () {
+                console.log("click in pre.");
+            })
+                .append("code")
+                .attr("class","language-clike")
+                .text(words[i]);
         }
+        
+        //
+        // var dataset=words;
+        // console.log(dataset);
+        // thisGraph.svgG.selectAll("text")
+        //     .data(dataset)
+        //     .enter()
+        //     .append("text")
+        //     .text(function (d) {
+        //         console.log(d);
+        //         return d;
+        //     });
+
+
 
         // var thing = thisGraph.svgG
         //     .append("text")
@@ -802,7 +829,7 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
             bodyEl = document.getElementsByTagName('body')[0];
         var x = window.innerWidth || docEl.clientWidth || bodyEl.clientWidth;
         var y = window.innerHeight || docEl.clientHeight || bodyEl.clientHeight;
-        svg.attr("width", x).attr("height", y);
+        svg.attr("width", x).attr("height", y/2);//fuying
     };
 
 
