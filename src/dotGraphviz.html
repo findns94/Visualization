@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+<script src="js/d3.v4.min.js"></script>
+<script src="js/viz.js"></script>
+<script src="js/d3-graphviz.js"></script>
+<div id="graph" style="text-align: center;"></div>
+<script>
+
+    //     var dotSrc = `
+    // digraph {
+    //     graph [label="Click on a node or an edge to delete it" labelloc="t", fontsize="20.0" tooltip=" "]
+    //     node [style="filled"]
+    //     Node1 [id="NodeId1" label="Memory dump" fillcolor="#d62728"]
+    //     Node2 [id="NodeId2" label="N2" fillcolor="#1f77b4"]
+    //     Node3 [id="NodeId3" label="N3" fillcolor="#2ca02c"]
+    //     Node4 [id="NodeId4" label="N4" fillcolor="#ff7f0e"]
+    //     Node1 -> Node2 [id="EdgeId12" label="public static BankAccount[] accounts;"]
+    //     Node1 -> Node3 [id="EdgeId13" label="public static Random Bank_random = new Random(1L);"]
+    //     Node2 -> Node3 [id="EdgeId23" label="int NUM_ACCOUNTS = 2;"]
+    //     Node3 -> Node4 [id="EdgeId34" label="public Account() {"]
+    // }
+    // `;
+
+
+    // var dotSrc = ``;
+
+    var thisGraph = this;
+
+    thisGraph.dots = {};
+
+    thisGraph.state = {
+        isClicked : false,
+        aaa : "NodeId5",
+        bbb : "",
+        ccc : 0
+    };
+
+    var graphviz = d3.select("#graph").graphviz();
+
+    // console.log(dotSrc);
+
+    d3.request("data/dots.txt")
+        .mimeType("text/plain")
+        // .response(function(xhr) { return psv.parse(xhr.responseText) })
+        .get(function (data) {
+            // console.log("pipe-delimited data:");
+            // var readData = ;
+            // console.log(read Data);s
+            var dots = data.response;
+            var dotsLines = dots.split('\n');
+
+            var graphLine = 0;
+
+            var graphNameIndex;
+            var graphName;
+
+            for (i = 0; i < dotsLines.length;i++) {
+                if (dotsLines[i].indexOf("[") === 0 && graphLine === 0){
+                    graphLine++;
+                    continue;
+                }
+                else if (dotsLines[i].indexOf("]") === 0){
+                    graphLine=0;
+                    continue;
+                }
+
+                if (graphLine===1){
+                    graphNameIndex = dotsLines[i].indexOf("{");
+                    graphName = dotsLines[i].slice(0,graphNameIndex).trim();
+
+                    if (graphName!=="digraph"){
+                        thisGraph.state[graphName] = {
+                            isClicked : false
+                        };
+                        thisGraph.dots[graphName] = "";
+                    }
+                    else {
+                        thisGraph.dots[graphName] = dotsLines[i] + "\n";
+                    }
+
+                    graphLine++;
+                    continue;
+                }
+                else {
+                    if (dotsLines[i].indexOf("}") >= 0 && graphName !=="digraph"){
+                        continue;
+                    }
+                    thisGraph.dots[graphName] += dotsLines[i] + "\n";
+                }
+
+            }
+
+
+            // dotSrc = data.response;
+            // alert(dotSrc)
+
+            // var dotSrc = `
+            // digraph {
+            //     graph [label="Click on a node or an edge to delete it" labelloc="t", fontsize="20.0" tooltip=" "]
+            //     node [style="filled"]
+            //     Node1 [id="NodeId1" label="Memory dump" fillcolor="#d62728"]
+            //     Node2 [id="NodeId2" label="N2" fillcolor="#1f77b4"]
+            //     Node3 [id="NodeId3" label="N3" fillcolor="#2ca02c"]
+            //     Node4 [id="NodeId4" label="N4" fillcolor="#ff7f0e"]
+            //     Node1 -> Node2 [id="EdgeId12" label="public static BankAccount[] accounts;"]
+            //     Node1 -> Node3 [id="EdgeId13" label="public static Random Bank_random = new Random(1L);"]
+            //     Node2 -> Node3 [id="EdgeId23" label="int NUM_ACCOUNTS = 2;"]
+            //     Node3 -> Node4 [id="EdgeId34" label="public Account() {"]
+            // }
+            // `;
+
+            function render(dotsrc) {
+                // alert(dotSrc);
+                // console.log('DOT source =', dotSrc);
+                var dotSrcLines = dotsrc.split('\n');
+
+                transition1 = d3.transition()
+                    .delay(100)
+                    .duration(1000);
+
+                graphviz
+                    .transition(transition1)
+                    .renderDot(dotsrc);
+
+                edges = d3.selectAll('.edge');
+
+                // console.log(nodes);
+
+                edges.each(function (val, i) {
+                    // console.log(this);
+                    // console.log(val.children);
+                    if (val.key === "Node4") {
+
+                        val["aaa"] = "NodeId5";
+                        // alert("val[\"isClicked\"] : " + thisGraph.state.isClicked);
+                        // val["isClicked"] = thisGraph.state.isClicked;
+
+                        // console.log(val);
+                    }
+                    // val.attributes.append("asad");
+                    // console.log(val.attributes);
+
+                    // console.log(i);
+                });
+
+                edges
+                    .on("click", function (d) {
+                        console.log(d.attributes.id);
+
+                        if (thisGraph.state[d.attributes.id].isClicked === false){
+                            console.log(thisGraph.state[d.attributes.id]);
+                            console.log(thisGraph.dots[d.attributes.id]);
+
+                            var newDotsArray = thisGraph.dots[d.attributes.id].split('\n');
+
+                            for (i = 0; i < newDotsArray.length;i++) {
+                                dotSrcLines.splice(-2, 0, newDotsArray[i]);
+                            }
+
+                            thisGraph.state[d.attributes.id].isClicked = true;
+
+                            dotsrc = dotSrcLines.join('\n');
+
+                            render(dotsrc);
+
+                        }
+
+                        // console.log(this);
+                        // console.log(d3.select("#NodeId5"));
+                        // console.log(d3.select("#NodeId5")._groups["0"]["0"]);
+                        if (d.aaa === "NodeId5") {
+                            // console.log(d);
+                            //delete a node
+                            if (thisGraph.state.isClicked === false) {
+                                thisGraph.state.isClicked = true;
+
+                                var nodeInfo = d3.select("#" + d.aaa);
+                                // console.log(nodeInfo);
+
+                                // var title = d3.select(this).selectAll('title').text().trim();
+                                // var text = d3.select(this).selectAll('text').text();
+                                // var id = d3.select(this).attr('id');
+                                // var class1 = d3.select(this).attr('class');
+
+                                // var nodeInfo = d3.select("#"+d.aaa)._groups["0"]["0"];
+
+
+                                var title = nodeInfo.selectAll('title').text().trim();
+                                var text = nodeInfo.selectAll('text').text();
+                                var id = nodeInfo.attr('id');
+                                var class1 = nodeInfo.attr('class');
+
+                                dotElement = title.replace('->', ' -> ');
+                                // console.log('Element id="%s" class="%s" title="%s" text="%s" dotElement="%s"', id, class1, title, text, dotElement);
+                                // console.log('Finding and deleting references to %s "%s" from the DOT source', class1, dotElement);
+                                for (i = 0; i < dotSrcLines.length;) {
+                                    if (dotSrcLines[i].indexOf(dotElement) >= 0) {
+                                        thisGraph.state.bbb = dotSrcLines[i];
+                                        thisGraph.state.ccc = i;
+                                        console.log(thisGraph.state.bbb);
+                                        // console.log('Deleting line %d: %s', i, dotSrcLines[i]);
+                                        dotSrcLines.splice(i, 1);
+                                    } else {
+                                        i++;
+                                    }
+                                }
+                                dotsrc = dotSrcLines.join('\n');
+                                render(dotsrc);
+
+                            }
+                            //add a node
+                            else {
+                                console.log(dotSrcLines);
+                                dotSrcLines.splice(thisGraph.state.ccc, 0,thisGraph.state.bbb);
+                                dotsrc = dotSrcLines.join('\n');
+                                thisGraph.state.isClicked = false;
+                                render(dotsrc);
+                                // console.log(d);
+                            }
+                        }
+                    });
+            }
+
+            render(thisGraph.dots["digraph"]);
+
+        });
+
+
+
+
+
+
+
+</script>

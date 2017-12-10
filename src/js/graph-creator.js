@@ -170,6 +170,8 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
                         console.log(thisGraph.codes);
 
                         thisGraph.edges = newEdges;
+
+                        d3.selectAll("path").remove();// remove existing path
                         thisGraph.updateGraph();
                     } catch (err) {
                         window.alert("Error parsing uploaded file\nerror message: " + err.message);
@@ -546,6 +548,10 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
         // .attr("dy", "-" + (nwords - 1) * 7.5)
         // .append('tspan').text("asfasfsaf");
 
+        // remove old links
+        console.log(paths.exit());
+        paths.exit().remove();
+
         //边上增加文字(代码)
         paths.enter()
             .append("g")
@@ -597,8 +603,7 @@ document.onload = (function (d3, saveAs, Blob, undefined) {
         //     .text("Wavy text is the gimmick for many years to come (d3)");
 
 
-        // remove old links
-        paths.exit().remove();
+
 
         // update existing nodes
         thisGraph.circles = thisGraph.circles.data(thisGraph.nodes, function (d) {

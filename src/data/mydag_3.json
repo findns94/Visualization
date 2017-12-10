@@ -1,0 +1,39 @@
+{
+  "nodes": [
+    {
+      "title": "new concept",
+      "id": 0,
+      "x": 403,
+      "y": 345,
+      "isclick": false
+    },
+    {
+      "title": "new concept",
+      "id": 1,
+      "x": 405,
+      "y": 149,
+      "isclick": false
+    },
+    {
+      "id": 2,
+      "title": "new concept",
+      "x": 403,
+      "y": 548,
+      "isclick": false
+    }
+  ],
+  "edges": [
+    {
+      "source": 1,
+      "target": 0,
+      "eid" : "ee",
+      "code": "    public static BankAccount[] accounts;\n"
+    },
+    {
+      "source": 0,
+      "target": 2,
+      "eid" : "ff",
+      "code": "    public static BankAccount[] accounts;\n"
+    }
+  ]
+}
