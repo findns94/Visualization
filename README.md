@@ -1,0 +1,3 @@
+# Visualization
+
+Use src/data/main.dot as input of graphviz rendering...
