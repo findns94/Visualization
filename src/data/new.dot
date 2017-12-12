@@ -17,22 +17,56 @@ digraph {
 	12 [label="No.12(N14 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@R(main::4)+[0,3] ::= [256, 256]\n@R(main::5)+[0,3] ::= [64, 64]\n@R(main::6)+[0,3] ::= [64, 64]\n@R(main::7)+[0,3] ::= [68719476736, 68719476736]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [64, 64]" id="12"]
 	13 [label="No.13(N15 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@R(main::4)+[0,3] ::= [256, 256]\n@R(main::5)+[0,3] ::= [64, 64]\n@R(main::6)+[0,3] ::= [64, 64]\n@R(main::7)+[0,3] ::= [68719476736, 68719476736]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [68719476736, 68719476736]" id="13"]
 	14 [label="No.14(N0 @ main[exit]) | RangeState (MemoryRange ::= Range) \n@R(main::$)+[0,3] ::= [0, 0]\n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@R(main::4)+[0,3] ::= [256, 256]\n@R(main::5)+[0,3] ::= [64, 64]\n@R(main::6)+[0,3] ::= [64, 64]\n@R(main::7)+[0,3] ::= [68719476736, 68719476736]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [68719476736, 68719476736]" id="14"]
-	0 -> 1 [label="Line 0: %1 = alloca i32, align 4" id="0 -> 1"]
-	1 -> 2 [label="Line 0: %localVar = alloca i32, align 4" id="1 -> 2"]
-	2 -> 3 [label="Line 0: store i32 0, i32* %1, align 4" id="2 -> 3"]
-	3 -> 4 [label="Line 0: store i32 8, i32* %localVar, align 4" id="3 -> 4"]
-	4 -> 5 [label="Line 0: %2 = load i32, i32* %localVar, align 4" id="4 -> 5"]
-	5 -> 6 [label="Line 0: %3 = shl i32 %2, 5" id="5 -> 6"]
-	6 -> 7 [label="Line 0: store i32 %3, i32* %localVar, align 4" id="6 -> 7"]
-	7 -> 8 [label="Line 0: %4 = load i32, i32* %localVar, align 4" id="7 -> 8"]
-	8 -> 9 [label="Line 0: %5 = ashr i32 %4, 2" id="8 -> 9"]
-	9 -> 10 [label="Line 0: store i32 %5, i32* %localVar, align 4" id="9 -> 10"]
-	10 -> 11 [label="Line 0: %6 = load i32, i32* %localVar, align 4" id="10 -> 11"]
-	11 -> 12 [label="Line 0: %7 = shl i32 %6, 30" id="11 -> 12"]
-	12 -> 13 [label="Line 0: store i32 %7, i32* %localVar, align 4" id="12 -> 13"]
-	13 -> 14 [label="Line 0: ret i32 0" id="13 -> 14"]
+  0 -> 4 [label="int localVar = 8;" id="0 -> 4"]
+  4 -> 7 [label="localVar = localVar << 5;" id="4 -> 7"]
+  7 -> 10 [label="localVar = localVar >> 2;" id="7 -> 10"]
+  10 -> 13 [label="localVar = localVar << 30;" id="10 -> 13"]
+  13 -> 14 [label="return 0;" id="13 -> 14"]
 }
 ],
 [
-
+0 -> 4 {
+  0
+  1
+  2
+  3
+  4
+  0 -> 1 [label="Line 0: %1 = alloca i32, align 4" id="0 -> 1"]
+	1 -> 2 [label="Line 0: %localVar = alloca i32, align 4" id="1 -> 2"]
+	2 -> 3 [label="Line 0: store i32 0, i32* %1, align 4" id="2 -> 3"]
+	3 -> 4 [label="Line 0: store i32 8, i32* %localVar, align 4" id="3 -> 4"]
+}
+],
+[
+4 -> 7 {
+  4
+  5
+  6
+  7
+  4 -> 5 [label="Line 0: %2 = load i32, i32* %localVar, align 4" id="4 -> 5"]
+	5 -> 6 [label="Line 0: %3 = shl i32 %2, 5" id="5 -> 6"]
+	6 -> 7 [label="Line 0: store i32 %3, i32* %localVar, align 4" id="6 -> 7"]
+}
+],
+[
+7 -> 10 {
+  7
+  8
+  9
+  10
+  7 -> 8 [label="Line 0: %4 = load i32, i32* %localVar, align 4" id="7 -> 8"]
+	8 -> 9 [label="Line 0: %5 = ashr i32 %4, 2" id="8 -> 9"]
+	9 -> 10 [label="Line 0: store i32 %5, i32* %localVar, align 4" id="9 -> 10"]
+}
+]，
+[
+10 -> 13 {
+  10
+  11
+  12
+  13
+  10 -> 11 [label="Line 0: %6 = load i32, i32* %localVar, align 4" id="10 -> 11"]
+	11 -> 12 [label="Line 0: %7 = shl i32 %6, 30" id="11 -> 12"]
+	12 -> 13 [label="Line 0: store i32 %7, i32* %localVar, align 4" id="12 -> 13"]
+}
 ]
