@@ -23,7 +23,7 @@ If you use npm, `npm install d3`. Otherwise, download the [latest release](https
 For the minified version:
 
 ```html
-<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/d3.min.js"></script>
 ```
 
 You can also use the standalone D3 microlibraries. For example, [d3-selection](https://github.com/d3/d3-selection):
