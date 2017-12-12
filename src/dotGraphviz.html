@@ -27,7 +27,7 @@
 
     var graphviz = d3.select("#graph").graphviz();
 
-    d3.request("data/dots.txt")
+    d3.request("data/main.dot")
         .mimeType("text/plain")
         .get(function (data) {
             var dots = data.response;
@@ -159,6 +159,8 @@
                     });
 
             }
+
+            console.log(thisGraph.dots["digraph"]);
 
             render(thisGraph.dots["digraph"]);
 
