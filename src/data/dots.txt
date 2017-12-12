@@ -6,9 +6,8 @@ digraph {
     Node2 [id="NodeId2" label="N2" fillcolor="#1f77b4"]
     Node3 [id="NodeId3" label="N3" fillcolor="#2ca02c"]
     Node4 [id="NodeId4" label="N4" fillcolor="#ff7f0e"]
-    Node5 [id="NodeId5" label="N5" fillcolor="#ff7f0e"]
     Node1 -> Node2 [id="EdgeId12" label="public static BankAccount[] accounts;"]
-    Node1 -> Node3 [id="EdgeId13" label="public static Random Bank_random = new Random(1L);"]
+    Node1 -> Node3 [id="EdgeId13" label="public static Random;"]
     Node2 -> Node3 [id="EdgeId23" label="int NUM_ACCOUNTS = 2;"]
     Node3 -> Node4 [id="EdgeId34" label="public Account() {"]
 }
@@ -18,16 +17,34 @@ EdgeId12  {
   a [fillcolor="#d62728"]
   c [fillcolor="#2ca02c"]
   b [fillcolor="#1f77b4"]
-  a -> b
-  a -> c
+  a -> b [id="EdgeIdab" label="public static Random;"]
+  b -> c [id="EdgeIdbc" label="public static Random;"]
 }
-]
+],
 [
 EdgeId13  {
-  a [fillcolor="#d62728"]
-  b [fillcolor="#1f77b4"]
-  c [fillcolor="#2ca02c"]
-  a -> b
-  a -> c
+  d [fillcolor="#d62728"]
+  e [fillcolor="#1f77b4"]
+  f [fillcolor="#2ca02c"]
+  d -> e [id="EdgeIdde" label="public static Random;"]
+  e -> f [id="EdgeIdef" label="public static Random;"]
+}
+],
+[
+EdgeId23  {
+  aa [fillcolor="#d62728"]
+  bb [fillcolor="#2ca02c"]
+  cc [fillcolor="#1f77b4"]
+  aa -> bb [id="EdgeIdaabb" label="public static Random;"]
+  bb -> cc [id="EdgeIdbbcc" label="public static Random;"]
+}
+],
+[
+EdgeId34  {
+  dd [fillcolor="#d62728"]
+  ee [fillcolor="#1f77b4"]
+  ff [fillcolor="#2ca02c"]
+  dd -> ee [id="EdgeIdddee" label="public static Random;"]
+  dd -> ff [id="EdgeIdddff" label="public static Random;"]
 }
 ]
