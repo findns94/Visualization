@@ -27,7 +27,7 @@
 
     var graphviz = d3.select("#graph").graphviz();
 
-    d3.request("data/main.dot")
+    d3.request("data/new.dot")
         .mimeType("text/plain")
         .get(function (data) {
             var dots = data.response;
@@ -102,6 +102,22 @@
                     .renderDot(dotsrc);
 
                 edges = d3.selectAll('.edge');
+
+                edges.on("mouseover", function (d) {
+                    // console.log(d);
+                    d3.select(this)
+                        .select("text")
+                        .transition()
+                        .style("fill", "red");
+
+                })
+                    .on("mouseout", function (d) {
+                        // console.log(d);
+                        d3.select(this)
+                            .select("text")
+                            .transition()
+                            .style("fill", "black");
+                    });
 
                 var newDotsArray;
 
