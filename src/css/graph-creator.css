@@ -1,4 +1,11 @@
 body {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    /*-khtml-user-select: none;*/
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    /*background-color: rgb(248, 248, 248)*/
     margin: 0;
     padding: 0;
     overflow: hidden;
@@ -10,26 +17,44 @@ p {
     position: relative;
 }
 
-body {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    /*-khtml-user-select: none;*/
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    /*background-color: rgb(248, 248, 248)*/
+.code_line_color{
+    margin: 0;
+    padding: 6px 12px;
 }
-
+.code_line_color:nth-child(odd) {
+    background:rgb(236, 236, 236);
+}
+.code_line_color:nth-child(even){
+    background:rgb(244, 244, 244);
+}
+.code_line_color:hover{
+    background:rgb(255, 255, 255);
+}
+.yes_img{
+    cursor:pointer;
+}
 #codebox {
+    /*position: absolute;*/
+    /*top: 0;*/
+    /*left: 0;*/
+    /*margin-bottom: 0.5em;*/
+    /*margin-left: 1em;*/
+    /*border: 2px solid #EEEEEE;*/
+    /*border-radius: 5px;*/
+    /*padding: 1em;*/
+    /*z-index: 5;*/
     position: absolute;
     top: 0;
     left: 0;
-    margin-bottom: 0.5em;
-    margin-left: 1em;
-    border: 2px solid #EEEEEE;
-    border-radius: 5px;
-    padding: 1em;
+    margin: 0.5em 0em 0em 1em;
+    border: 3px solid #EEEEEE;
+    border-radius: 1px;
+    padding: 0.5em;
     z-index: 5;
+    width: 450px;
+    overflow: auto;
+    /*height: 95%;*/
+    /*background: #ececec36;*/
 }
 
 #toolbox {
