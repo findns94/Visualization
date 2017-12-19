@@ -13,11 +13,10 @@
         <input type="image" id="delete-graph" title="delete graph" alt="delete graph">
     </div>
 
-    <!--<pre id="syntaxy" data-type="markup">-->
-    <!--</pre>-->
+
     <div id="codebox" data-type="default">
-        int localVar = 8;
     </div>
+
     <div id="graph" style="text-align: center;"></div>
     <script src="js/jquery-3.1.1.js"></script>
     <script src="js/d3.v4.min.js"></script>
@@ -31,204 +30,230 @@
         thisGraph.dots = {};
         thisGraph.state = {};
         var graphviz = d3.select("#graph").graphviz();
-        //fuying
+
+        function render(dotsrc) {
+            var dotSrcLines = dotsrc.split('\n');
+
+            transition1 = d3.transition()
+                .delay(100)
+                .duration(1000);
+
+            graphviz
+                .transition(transition1)
+                .renderDot(dotsrc);
+
+            edges = d3.selectAll('.edge');
+
+            edges.on("mouseover", function (d) {
+                // console.log(d);
+                d3.select(this)
+                    .selectAll("text")
+                    .transition()
+                    .style("fill", "red");
+
+            })
+                .on("mouseout", function (d) {
+                    // console.log(d);
+                    d3.select(this)
+                        .selectAll("text")
+                        .transition()
+                        .style("fill", "black");
+                });
+
+            var newDotsArray;
+
+            function displayEdges(edgeId) {
+                // console.log(thisGraph.state.hasOwnProperty(edgeId));
+
+                if (!thisGraph.state.hasOwnProperty(edgeId)) {
+                    // console.log(edgeId + " has no isClicked property");
+                }
+                else if (thisGraph.state[edgeId].isClicked === false) {
+                    newDotsArray = thisGraph.dots[edgeId].split('\n');
+
+                    for (i = 0; i < newDotsArray.length; i++) {
+                        if (newDotsArray[i] !== "") {
+                            dotSrcLines.splice(-2, 0, newDotsArray[i]);
+                        }
+                    }
+
+                    // console.log(dotSrcLines);
+                    thisGraph.state[edgeId].isClicked = true;
+                    dotsrc = dotSrcLines.join('\n');
+                    render(dotsrc);
+
+
+                }
+                else {
+                    newDotsArray = thisGraph.dots[edgeId].split('\n');
+
+                    for (i = 0; i < newDotsArray.length; i++) {
+                        if (newDotsArray[i] !== "") {
+                            // console.log(deleteIndex);
+                            var deleteIndex = dotSrcLines.indexOf(newDotsArray[i]);
+                            dotSrcLines.splice(deleteIndex, 1);
+                        }
+                    }
+
+                    thisGraph.state[edgeId].isClicked = false;
+                    dotsrc = dotSrcLines.join('\n');
+                    render(dotsrc);
+
+
+                }
+            }
+            //fuying
+
+            d3.selectAll('.yes_img')
+                .on("click", function () {
+                    // console.log(d3.select(this).attr("ref"));
+                    var edgeId = d3.select(this).attr("ref");
+                    displayEdges(edgeId);
+                });
+
+            edges
+                .on("click", function (d) {
+                    var edgeId = d.attributes.id;
+                    // console.log(edgeId);
+                    displayEdges(edgeId);
+                });
+
+        }
+
+        function codehighlight() {
+            var target  = document.getElementById( 'codebox' );
+            var syntaxy = new Syntaxy( target, {} );
+            syntaxy.render();
+
+            var maxLen = 0;
+            // add class to show image
+            $(".code_line_color").each(function(i,obj){
+                // if(maxLen<$(".code_line_color").eq(i).width()){
+                //     maxLen = $(".code_line_color").eq(i).width();
+                // }
+                if(thisGraph.state.hasOwnProperty(d3.select(obj).attr("ref"))) {
+                    $(".code_line_color").eq(i).addClass("yes_img");
+                }
+            });
+            // $(".code_line_color").each(function(i,obj) {
+            //     $(".code_line_color").eq(i).width(maxLen);
+            // });
+        }
+        
+        function readdotsfile(dotsLines) {
+
+
+            var graphLine = 0;
+            var graphNameIndex;
+            var graphName;
+            //fuying
+            var codes="";
+            for (i = 0; i < dotsLines.length; i++) {
+                if (dotsLines[i].indexOf("[") === 0 && graphLine === 0) {
+                    graphLine++;
+                    continue;
+                }
+                else if (dotsLines[i].indexOf("]") === 0) {
+                    graphLine = 0;
+                    continue;
+                }
+
+                if (graphLine === 1) {
+                    //extract graph name or edge name
+                    graphNameIndex = dotsLines[i].indexOf("{");
+                    graphName = dotsLines[i].slice(0, graphNameIndex).trim();
+
+                    if (graphName !== "digraph") {
+                        thisGraph.state[graphName] = {
+                            isClicked: false
+                        };
+                        thisGraph.dots[graphName] = "";
+                    }
+                    else {
+                        thisGraph.dots[graphName] = dotsLines[i] + "\n";
+                    }
+
+                    graphLine++;
+                    continue;
+                }
+                else {
+                    if (dotsLines[i].indexOf("}") >= 0 && graphName !== "digraph" || dotsLines[i].trim() === "") {
+                        continue;
+                    }
+
+                    if (dotsLines[i].indexOf("->") >= 0) {
+                        var labelRegex = /label="(.*?)"/g;
+                        var labelArray = labelRegex.exec(dotsLines[i]);
+
+                        var idRegex = /id="(.*?)"/g;
+                        var idArray = idRegex.exec(dotsLines[i]);
+
+                        tempRefArray.push(idArray[1]);
+                        codes = codes + labelArray[1]+"\n"
+
+                    }
+                    d3.select("#codebox").text(codes);
+                    thisGraph.dots[graphName] += dotsLines[i] + "\n";
+                }
+
+            }
+        }
+
+        d3.select("#download-input").on("click", function () {
+           //dont know download what
+            alert("nothing to download now")
+
+        });
+        d3.select("#upload-input").on("click", function () {
+            document.getElementById("hidden-file-upload").click();
+        });
+        d3.select("#hidden-file-upload").on("change", function () {
+            if (window.File && window.FileReader && window.FileList && window.Blob) {
+                var uploadFile = this.files[0];
+                var filereader = new window.FileReader();
+                thisGraph.codes = "";
+
+                filereader.onload = function () {
+                    var dotsfile = filereader.result;
+
+                    // TODO better error handling
+                    try {
+
+                        var dotsLines = dotsfile.split('\n');
+
+                        readdotsfile(dotsLines);
+
+                        codehighlight();
+
+
+                        console.log(thisGraph.dots["digraph"]);
+                        //
+                        render(thisGraph.dots["digraph"]);
+
+                    } catch (err) {
+                        window.alert("Error parsing uploaded file\nerror message: " + err.message);
+                        return;
+                    }
+
+                };
+                filereader.readAsText(uploadFile);
+
+            } else {
+                alert("Your browser won't let you save this graph -- try upgrading your browser to IE 10+ or Chrome or Firefox.");
+            }
+
+        });
+
+
         d3.request("data/new.dot")
             .mimeType("text/plain")
             .get(function (data) {
                 var dots = data.response;
                 var dotsLines = dots.split('\n');
-                var graphLine = 0;
-                var graphNameIndex;
-                var graphName;
-                //fuying
-                var codes="";
 
-                for (i = 0; i < dotsLines.length; i++) {
-                    if (dotsLines[i].indexOf("[") === 0 && graphLine === 0) {
-                        graphLine++;
-                        continue;
-                    }
-                    else if (dotsLines[i].indexOf("]") === 0) {
-                        graphLine = 0;
-                        continue;
-                    }
+                readdotsfile(dotsLines);
 
-                    if (graphLine === 1) {
-                        //extract graph name or edge name
-                        graphNameIndex = dotsLines[i].indexOf("{");
-                        graphName = dotsLines[i].slice(0, graphNameIndex).trim();
-
-                        if (graphName !== "digraph") {
-                            thisGraph.state[graphName] = {
-                                isClicked: false
-                            };
-                            thisGraph.dots[graphName] = "";
-                        }
-                        else {
-                            thisGraph.dots[graphName] = dotsLines[i] + "\n";
-                        }
-
-                        graphLine++;
-                        continue;
-                    }
-                    else {
-                        if (dotsLines[i].indexOf("}") >= 0 && graphName !== "digraph" || dotsLines[i].trim() === "") {
-                            continue;
-                        }
-
-                        if (dotsLines[i].indexOf("->") >= 0) {
-                            var labelRegex = /label="(.*?)"/g;
-                            var labelArray = labelRegex.exec(dotsLines[i]);
-
-                            var idRegex = /id="(.*?)"/g;
-                            var idArray = idRegex.exec(dotsLines[i]);
-
-
-                            //fuying codehightlight
-                            // d3.select("#codebox")
-                            //     .append("div")
-                            //     .text(labelArray[1])
-                            //     .attr("class", "code_line_color")
-                            //     .attr("ref", idArray[1]);
-                            tempRefArray.push(idArray[1]);
-                            codes = codes + labelArray[1]+"\n"
-                            d3.select("#codebox")
-                                // .append("div")
-                                // .text(labelArray[1]+"\n")
-                                // .attr("class", "code_line_color")
-                                // .attr("ref", idArray[1]);
-                            // if(thisGraph.state.hasOwnProperty(d3.select(this).attr("ref"))){
-                            //     // add class to show image
-                            //     d3.select("#codebox")
-                            //         .append("div")
-                            //         .text(labelArray[1])
-                            //         .attr("class", "code_line_color yes_img")
-                            //         .attr("ref", idArray[1]);
-                            // }
-                            // codes+=(labelArray[1]+"\n");
-
-                            // console.log(labelArray[1]);
-                            // console.log(idArray[1]);
-                        }
-                        d3.select("#codebox").text(codes);
-                        thisGraph.dots[graphName] += dotsLines[i] + "\n";
-                    }
-
-                }
-
-                var target  = document.getElementById( 'codebox' );
-                var syntaxy = new Syntaxy( target, {} );
-                syntaxy.render();
-
-                var maxLen = 0;
-                // add class to show image
-                $(".code_line_color").each(function(i,obj){
-                    // if(maxLen<$(".code_line_color").eq(i).width()){
-                    //     maxLen = $(".code_line_color").eq(i).width();
-                    // }
-                    if(thisGraph.state.hasOwnProperty(d3.select(obj).attr("ref"))) {
-                        $(".code_line_color").eq(i).addClass("yes_img");
-                    }
-                });
-                // $(".code_line_color").each(function(i,obj) {
-                //     $(".code_line_color").eq(i).width(maxLen);
-                // });
-
-
-                function render(dotsrc) {
-                    var dotSrcLines = dotsrc.split('\n');
-
-                    transition1 = d3.transition()
-                        .delay(100)
-                        .duration(1000);
-
-                    graphviz
-                        .transition(transition1)
-                        .renderDot(dotsrc);
-
-                    edges = d3.selectAll('.edge');
-
-                    edges.on("mouseover", function (d) {
-                        // console.log(d);
-                        d3.select(this)
-                            .select("text")
-                            .transition()
-                            .style("fill", "red");
-
-                    })
-                        .on("mouseout", function (d) {
-                            // console.log(d);
-                            d3.select(this)
-                                .select("text")
-                                .transition()
-                                .style("fill", "black");
-                        });
-
-                    var newDotsArray;
-
-                    function displayEdges(edgeId) {
-                        // console.log(thisGraph.state.hasOwnProperty(edgeId));
-
-                        if (!thisGraph.state.hasOwnProperty(edgeId)) {
-                            console.log(edgeId + " has no isClicked property");
-                        }
-                        else if (thisGraph.state[edgeId].isClicked === false) {
-                            newDotsArray = thisGraph.dots[edgeId].split('\n');
-
-                            for (i = 0; i < newDotsArray.length; i++) {
-                                if (newDotsArray[i] !== "") {
-                                    dotSrcLines.splice(-2, 0, newDotsArray[i]);
-                                }
-                            }
-
-                            // console.log(dotSrcLines);
-                            thisGraph.state[edgeId].isClicked = true;
-                            dotsrc = dotSrcLines.join('\n');
-                            render(dotsrc);
-
-                        }
-                        else {
-                            newDotsArray = thisGraph.dots[edgeId].split('\n');
-
-                            for (i = 0; i < newDotsArray.length; i++) {
-                                if (newDotsArray[i] !== "") {
-                                    // console.log(deleteIndex);
-                                    var deleteIndex = dotSrcLines.indexOf(newDotsArray[i]);
-                                    dotSrcLines.splice(deleteIndex, 1);
-                                }
-                            }
-
-                            thisGraph.state[edgeId].isClicked = false;
-                            dotsrc = dotSrcLines.join('\n');
-                            render(dotsrc);
-
-                        }
-                    }
-                    //fuying
-                    // d3.selectAll('.stx-line-wrap')
-                    //     .on("click", function () {
-                    //         // console.log(d3.select(this).attr("ref"));
-                    //         var edgeId = d3.select(this).attr("ref");
-                    //         displayEdges(edgeId);
-                    //     });
-
-                    d3.selectAll('.yes_img')
-                        .on("click", function () {
-                            // console.log(d3.select(this).attr("ref"));
-                            var edgeId = d3.select(this).attr("ref");
-                            displayEdges(edgeId);
-                        });
-
-                    edges
-                        .on("click", function (d) {
-                            var edgeId = d.attributes.id;
-                            // console.log(edgeId);
-                            displayEdges(edgeId);
-                        });
-
-                }
-
-                console.log(thisGraph.dots["digraph"]);
+                codehighlight()
 
                 render(thisGraph.dots["digraph"]);
 
