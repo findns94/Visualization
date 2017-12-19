@@ -9,7 +9,7 @@
     <div id="toolbox">
         <input type="file" id="hidden-file-upload">
         <input id="upload-input" type="image" title="upload graph" alt="upload graph">
-        <input type="image" id="download-input" title="download graph" alt="download graph">
+        <!--<input type="image" id="download-input" title="download graph" alt="download graph">-->
         <input type="image" id="delete-graph" title="delete graph" alt="delete graph">
     </div>
 
@@ -199,11 +199,7 @@
             }
         }
 
-        d3.select("#download-input").on("click", function () {
-           //dont know download what
-            alert("nothing to download now")
 
-        });
         d3.select("#upload-input").on("click", function () {
             document.getElementById("hidden-file-upload").click();
         });
@@ -222,6 +218,10 @@
                         var dotsLines = dotsfile.split('\n');
 
                         readdotsfile(dotsLines);
+                        d3.selectAll(".stx-wrap").remove();
+                        d3.selectAll(".node").remove();
+                        d3.selectAll(".edge").remove();
+                        d3.selectAll(".path").remove();
 
                         codehighlight();
 
@@ -244,6 +244,14 @@
 
         });
 
+        d3.select("#delete-graph").on("click", function () {
+            // d3.selectAll("path").remove();// remove existing path
+            d3.selectAll(".stx-wrap").remove();
+            d3.selectAll(".node").remove();
+            d3.selectAll(".edge").remove();
+            d3.selectAll(".path").remove();
+
+        });
 
         d3.request("data/new.dot")
             .mimeType("text/plain")
