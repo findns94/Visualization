@@ -27,20 +27,44 @@
 
         var tempRefArray = new Array();
         var thisGraph = this;
+        var digraphLines = '';// main digraph srcLines
         thisGraph.dots = {};
         thisGraph.state = {};
         var graphviz = d3.select("#graph").graphviz();
 
-        function render(dotsrc) {
+        function render(dotsrc,durationTime) {
             var dotSrcLines = dotsrc.split('\n');
+
+            //console.log(dotSrcLines);
 
             transition1 = d3.transition()
                 .delay(100)
-                .duration(1000);
+                .duration(durationTime);
 
             graphviz
                 .transition(transition1)
                 .renderDot(dotsrc);
+
+            //change svg width
+            graphvizSvg = d3.selectAll('svg');
+            graphvizSvg.transition(transition1)
+                .attr('width',document.body.clientWidth);
+            //console.log(graphvizSvg.attr('width'));
+
+            graphvizSvg.on("mouseover",function () {
+                // console.log(thisGraph.state);
+
+                for (edge in thisGraph.state){
+                    if (thisGraph.state[edge].isClicked === true){
+                        var edgeElement = document.getElementById(edge);
+                        // console.log(edgeElement);
+                        d3.select(edgeElement)
+                            .selectAll("text")
+                            .attr("fill","red");
+                    }
+                }
+            });
+
 
             edges = d3.selectAll('.edge');
 
@@ -50,15 +74,38 @@
                     .selectAll("text")
                     .transition()
                     .style("fill", "red");
-
-            })
+                })
                 .on("mouseout", function (d) {
-                    // console.log(d);
+                    // console.log(this.id);
+
+                    var edgeId = this.id;
+
                     d3.select(this)
                         .selectAll("text")
                         .transition()
-                        .style("fill", "black");
+                        .style("fill", function () {
+                            if (thisGraph.state.hasOwnProperty(edgeId) && thisGraph.state[edgeId].isClicked === true){
+                                return "red";
+                            }
+                            else{
+                                return "black";
+                            }
+                        });
                 });
+                // .selectAll("text")
+                // .style("fill",function (d) {
+                //     // console.log(d.parent.attributes.id);
+                //
+                //     var edgeId = d.parent.attributes.id;
+                //
+                //     if (thisGraph.state.hasOwnProperty(edgeId) && thisGraph.state[edgeId].isClicked === true){
+                //         console.log(edgeId);
+                //         return "red";
+                //     }
+                //     else{
+                //         return "black";
+                //     }
+                // });
 
             var newDotsArray;
 
@@ -71,16 +118,33 @@
                 else if (thisGraph.state[edgeId].isClicked === false) {
                     newDotsArray = thisGraph.dots[edgeId].split('\n');
 
+                    // console.log(digraphLines);
+
+                    dotSrcLinesCopy = digraphLines.split('\n');
+
+                    render(digraphLines,1000);
+
+                    // console.log(dotSrcLines);
+
                     for (i = 0; i < newDotsArray.length; i++) {
                         if (newDotsArray[i] !== "") {
-                            dotSrcLines.splice(-2, 0, newDotsArray[i]);
+                            //add lines
+                            dotSrcLinesCopy.splice(-2, 0, newDotsArray[i]);
                         }
                     }
 
                     // console.log(dotSrcLines);
+
+                    for (i in thisGraph.state){
+                        thisGraph.state[i].isClicked = false;
+                    }
+
                     thisGraph.state[edgeId].isClicked = true;
-                    dotsrc = dotSrcLines.join('\n');
-                    render(dotsrc);
+
+                    //console.log(thisGraph.state);
+
+                    dotsrc = dotSrcLinesCopy.join('\n');
+                    render(dotsrc,2000);
 
 
                 }
@@ -91,13 +155,14 @@
                         if (newDotsArray[i] !== "") {
                             // console.log(deleteIndex);
                             var deleteIndex = dotSrcLines.indexOf(newDotsArray[i]);
+                            // delete lines
                             dotSrcLines.splice(deleteIndex, 1);
                         }
                     }
 
                     thisGraph.state[edgeId].isClicked = false;
                     dotsrc = dotSrcLines.join('\n');
-                    render(dotsrc);
+                    render(dotsrc,1000);
 
 
                 }
@@ -117,6 +182,8 @@
                     // console.log(edgeId);
                     displayEdges(edgeId);
                 });
+
+
 
         }
 
@@ -181,7 +248,7 @@
                         continue;
                     }
 
-                    if (dotsLines[i].indexOf("->") >= 0) {
+                    if (dotsLines[i].indexOf("->") >= 0 && graphName === "digraph") {
                         var labelRegex = /label="(.*?)"/g;
                         var labelArray = labelRegex.exec(dotsLines[i]);
 
@@ -225,10 +292,10 @@
 
                         codehighlight();
 
-
-                        console.log(thisGraph.dots["digraph"]);
+                        digraphLines = thisGraph.dots["digraph"];
+                        //console.log(thisGraph.dots["digraph"]);
                         //
-                        render(thisGraph.dots["digraph"]);
+                        render(thisGraph.dots["digraph"],1000);
 
                     } catch (err) {
                         window.alert("Error parsing uploaded file\nerror message: " + err.message);
@@ -261,9 +328,13 @@
 
                 readdotsfile(dotsLines);
 
-                codehighlight()
+                codehighlight();
 
-                render(thisGraph.dots["digraph"]);
+                digraphLines = thisGraph.dots["digraph"];
+
+                // console.log(digraphLines);
+
+                render(thisGraph.dots["digraph"],1000);
 
             });
 

@@ -2,12 +2,12 @@
 digraph {
 	graph [label="Click on a node or an edge to delete it" labelloc="t", fontsize="20.0" tooltip="This is a tooltip"]
 	node [style="filled" shape="box"]
-	00 [label="No.0(N1 @ main[entry]) | RangeState (MemoryRange ::= Range) \n" id="00"]
-	04 [label="No.4(N6 @ main) | RangeState (MemoryRange ::= Range) \n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [8, 8]" id="04"]
-	07 [label="No.7(N9 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [256, 256]" id="07"]
-	010 [label="No.10(N12 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@R(main::4)+[0,3] ::= [256, 256]\n@R(main::5)+[0,3] ::= [64, 64]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [64, 64]" id="010"]
-	013 [label="No.13(N15 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@R(main::4)+[0,3] ::= [256, 256]\n@R(main::5)+[0,3] ::= [64, 64]\n@R(main::6)+[0,3] ::= [64, 64]\n@R(main::7)+[0,3] ::= [68719476736, 68719476736]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [68719476736, 68719476736]" id="013"]
-	014 [label="No.14(N0 @ main[exit]) | RangeState (MemoryRange ::= Range) \n@R(main::$)+[0,3] ::= [0, 0]\n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@R(main::4)+[0,3] ::= [256, 256]\n@R(main::5)+[0,3] ::= [64, 64]\n@R(main::6)+[0,3] ::= [64, 64]\n@R(main::7)+[0,3] ::= [68719476736, 68719476736]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [68719476736, 68719476736]" id="014"]
+	00 [label="No.0(N1 @ main[entry]) | RangeState (MemoryRange ::= Range) \n" id="00" fillcolor="#1f77b4" width="8" fixedsize="false"]
+	04 [label="No.4(N6 @ main) | RangeState (MemoryRange ::= Range) \n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [8, 8]" id="04" width="8" fixedsize="false"]
+	07 [label="No.7(N9 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [256, 256]" id="07" width="8" fixedsize="false"]
+	010 [label="No.10(N12 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@R(main::4)+[0,3] ::= [256, 256]\n@R(main::5)+[0,3] ::= [64, 64]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [64, 64]" id="010" width="8" fixedsize="false"]
+	013 [label="No.13(N15 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@R(main::4)+[0,3] ::= [256, 256]\n@R(main::5)+[0,3] ::= [64, 64]\n@R(main::6)+[0,3] ::= [64, 64]\n@R(main::7)+[0,3] ::= [68719476736, 68719476736]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [68719476736, 68719476736]" id="013" width="8" fixedsize="false"]
+	014 [label="No.14(N0 @ main[exit]) | RangeState (MemoryRange ::= Range) \n@R(main::$)+[0,3] ::= [0, 0]\n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@R(main::4)+[0,3] ::= [256, 256]\n@R(main::5)+[0,3] ::= [64, 64]\n@R(main::6)+[0,3] ::= [64, 64]\n@R(main::7)+[0,3] ::= [68719476736, 68719476736]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [68719476736, 68719476736]" id="014" width="8" fixedsize="false"]
 	00 -> 04 [label="int localVar = 8;" id="00 -> 04"]
   	04 -> 07 [label="localVar = localVar << 5;" id="04 -> 07"]
   	07 -> 010 [label="localVar = localVar >> 2;" id="07 -> 010"]
@@ -17,47 +17,47 @@ digraph {
 ],
 [
 00 -> 04 {
-	10 [label="No.0(N1 @ main[entry]) | RangeState (MemoryRange ::= Range) \n" id="10"]
-	11 [label="No.1(N3 @ main) | RangeState (MemoryRange ::= Range) \n@S(main::1*)+[0,3] ::= UnknownRange(uninitialized)" id="11"]
-	12 [label="No.2(N4 @ main) | RangeState (MemoryRange ::= Range) \n@S(main::1*)+[0,3] ::= UnknownRange(uninitialized)\n@S(main::localVar*)+[0,3] ::= UnknownRange(uninitialized)" id="12"]
-	13 [label="No.3(N5 @ main) | RangeState (MemoryRange ::= Range) \n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= UnknownRange(uninitialized)" id="13"]
-	14 [label="No.4(N6 @ main) | RangeState (MemoryRange ::= Range) \n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [8, 8]" id="14"]
-	10 -> 11 [label="Line 0: %1 = alloca i32, align 4" id="10 -> 11"]
-	11 -> 12 [label="Line 0: %localVar = alloca i32, align 4" id="11 -> 12"]
-	12 -> 13 [label="Line 0: store i32 0, i32* %1, align 4" id="12 -> 13"]
-	13 -> 14 [label="Line 0: store i32 8, i32* %localVar, align 4" id="13 -> 14"]
+	10 [label="No.0(N1 @ main[entry]) | RangeState (MemoryRange ::= Range) \n" id="10" width="8" fixedsize="false"]
+	11 [label="No.1(N3 @ main) | RangeState (MemoryRange ::= Range) \n@S(main::1*)+[0,3] ::= UnknownRange(uninitialized)" id="11" width="8" fixedsize="false"]
+	12 [label="No.2(N4 @ main) | RangeState (MemoryRange ::= Range) \n@S(main::1*)+[0,3] ::= UnknownRange(uninitialized)\n@S(main::localVar*)+[0,3] ::= UnknownRange(uninitialized)" id="12" width="8" fixedsize="false"]
+	13 [label="No.3(N5 @ main) | RangeState (MemoryRange ::= Range) \n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= UnknownRange(uninitialized)" id="13" width="8" fixedsize="false"]
+	14 [label="No.4(N6 @ main) | RangeState (MemoryRange ::= Range) \n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [8, 8]" id="14" width="8" fixedsize="false"]
+	10 -> 11 [label="%1 = alloca i32, align 4" id="10 -> 11"]
+	11 -> 12 [label="%localVar = alloca i32, align 4" id="11 -> 12"]
+	12 -> 13 [label="store i32 0, i32* %1, align 4" id="12 -> 13"]
+	13 -> 14 [label="store i32 8, i32* %localVar, align 4" id="13 -> 14"]
 }
 ],
 [
 04 -> 07 {
-	24 [label="No.4(N6 @ main) | RangeState (MemoryRange ::= Range) \n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [8, 8]" id="24"]
-	25 [label="No.5(N7 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [8, 8]" id="25"]
-	26 [label="No.6(N8 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [8, 8]" id="26"]
-	27 [label="No.7(N9 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [256, 256]" id="27"]
-  	24 -> 25 [label="Line 0: %2 = load i32, i32* %localVar, align 4" id="24 -> 25"]
-	25 -> 26 [label="Line 0: %3 = shl i32 %2, 5" id="25 -> 26"]
-	26 -> 27 [label="Line 0: store i32 %3, i32* %localVar, align 4" id="26 -> 27"]
+	24 [label="No.4(N6 @ main) | RangeState (MemoryRange ::= Range) \n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [8, 8]" id="24" width="8" fixedsize="false"]
+	25 [label="No.5(N7 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [8, 8]" id="25" width="8" fixedsize="false"]
+	26 [label="No.6(N8 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [8, 8]" id="26" width="8" fixedsize="false"]
+	27 [label="No.7(N9 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [256, 256]" id="27" width="8" fixedsize="false"]
+  	24 -> 25 [label="%2 = load i32, i32* %localVar, align 4" id="24 -> 25"]
+	25 -> 26 [label="%3 = shl i32 %2, 5" id="25 -> 26"]
+	26 -> 27 [label="store i32 %3, i32* %localVar, align 4" id="26 -> 27"]
 }
 ],
 [
 07 -> 010 {
-	37 [label="No.7(N9 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [256, 256]" id="37"]
-	38 [label="No.8(N10 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@R(main::4)+[0,3] ::= [256, 256]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [256, 256]" id="38"]
-	39 [label="No.9(N11 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@R(main::4)+[0,3] ::= [256, 256]\n@R(main::5)+[0,3] ::= [64, 64]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [256, 256]" id="39"]
-	310 [label="No.10(N12 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@R(main::4)+[0,3] ::= [256, 256]\n@R(main::5)+[0,3] ::= [64, 64]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [64, 64]" id="310"]
-  	37 -> 38 [label="Line 0: %4 = load i32, i32* %localVar, align 4" id="37 -> 38"]
-	38 -> 39 [label="Line 0: %5 = ashr i32 %4, 2" id="38 -> 39"]
-	39 -> 310 [label="Line 0: store i32 %5, i32* %localVar, align 4" id="39 -> 310"]
+	37 [label="No.7(N9 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [256, 256]" id="37" width="8" fixedsize="false"]
+	38 [label="No.8(N10 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@R(main::4)+[0,3] ::= [256, 256]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [256, 256]" id="38" width="8" fixedsize="false"]
+	39 [label="No.9(N11 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@R(main::4)+[0,3] ::= [256, 256]\n@R(main::5)+[0,3] ::= [64, 64]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [256, 256]" id="39" width="8" fixedsize="false"]
+	310 [label="No.10(N12 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@R(main::4)+[0,3] ::= [256, 256]\n@R(main::5)+[0,3] ::= [64, 64]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [64, 64]" id="310" width="8" fixedsize="false"]
+  	37 -> 38 [label="%4 = load i32, i32* %localVar, align 4" id="37 -> 38"]
+	38 -> 39 [label="%5 = ashr i32 %4, 2" id="38 -> 39"]
+	39 -> 310 [label="store i32 %5, i32* %localVar, align 4" id="39 -> 310"]
 }
 ]，
 [
 010 -> 013 {
-	410 [label="No.10(N12 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@R(main::4)+[0,3] ::= [256, 256]\n@R(main::5)+[0,3] ::= [64, 64]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [64, 64]" id="410"]
-	411 [label="No.11(N13 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@R(main::4)+[0,3] ::= [256, 256]\n@R(main::5)+[0,3] ::= [64, 64]\n@R(main::6)+[0,3] ::= [64, 64]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [64, 64]" id="411"]
-	412 [label="No.12(N14 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@R(main::4)+[0,3] ::= [256, 256]\n@R(main::5)+[0,3] ::= [64, 64]\n@R(main::6)+[0,3] ::= [64, 64]\n@R(main::7)+[0,3] ::= [68719476736, 68719476736]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [64, 64]" id="412"]
-	413 [label="No.13(N15 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@R(main::4)+[0,3] ::= [256, 256]\n@R(main::5)+[0,3] ::= [64, 64]\n@R(main::6)+[0,3] ::= [64, 64]\n@R(main::7)+[0,3] ::= [68719476736, 68719476736]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [68719476736, 68719476736]" id="413"]
-  	410 -> 411 [label="Line 0: %6 = load i32, i32* %localVar, align 4" id="410 -> 411"]
-	411 -> 412 [label="Line 0: %7 = shl i32 %6, 30" id="411 -> 412"]
-	412 -> 413 [label="Line 0: store i32 %7, i32* %localVar, align 4" id="412 -> 413"]
+	410 [label="No.10(N12 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@R(main::4)+[0,3] ::= [256, 256]\n@R(main::5)+[0,3] ::= [64, 64]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [64, 64]" id="410" width="8" fixedsize="false"]
+	411 [label="No.11(N13 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@R(main::4)+[0,3] ::= [256, 256]\n@R(main::5)+[0,3] ::= [64, 64]\n@R(main::6)+[0,3] ::= [64, 64]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [64, 64]" id="411" width="8" fixedsize="false"]
+	412 [label="No.12(N14 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@R(main::4)+[0,3] ::= [256, 256]\n@R(main::5)+[0,3] ::= [64, 64]\n@R(main::6)+[0,3] ::= [64, 64]\n@R(main::7)+[0,3] ::= [68719476736, 68719476736]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [64, 64]" id="412" width="8" fixedsize="false"]
+	413 [label="No.13(N15 @ main) | RangeState (MemoryRange ::= Range) \n@R(main::2)+[0,3] ::= [8, 8]\n@R(main::3)+[0,3] ::= [256, 256]\n@R(main::4)+[0,3] ::= [256, 256]\n@R(main::5)+[0,3] ::= [64, 64]\n@R(main::6)+[0,3] ::= [64, 64]\n@R(main::7)+[0,3] ::= [68719476736, 68719476736]\n@S(main::1*)+[0,3] ::= [0, 0]\n@S(main::localVar*)+[0,3] ::= [68719476736, 68719476736]" id="413" width="8" fixedsize="false"]
+  	410 -> 411 [label="%6 = load i32, i32* %localVar, align 4" id="410 -> 411"]
+	411 -> 412 [label="%7 = shl i32 %6, 30" id="411 -> 412"]
+	412 -> 413 [label="store i32 %7, i32* %localVar, align 4" id="412 -> 413"]
 }
 ]
