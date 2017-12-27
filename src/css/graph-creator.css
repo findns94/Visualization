@@ -70,8 +70,8 @@ p {
 }
 
 #toolbox input {
-    width: 30px;
-    opacity: 0.4;
+    width: 50px;
+    opacity: 0.5;
 }
 
 #toolbox input:hover {
@@ -134,4 +134,19 @@ path.link.hidden {
 
 path.link.selected {
     stroke: rgb(229, 172, 247);
+}
+
+.tooltip{
+    font-family: monaco,"Courier New",monospace;
+    font-style:normal;
+    font-weight:bold;
+    font-size: 20px;
+    width: 120;
+    height: auto;
+    position: absolute;
+    text-align: center;
+    border-style: solid;
+    border-width: 1px;
+    background-color: white;
+    border-radius: 5px;
 }

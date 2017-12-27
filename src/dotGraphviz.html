@@ -6,11 +6,12 @@
 
 </head>
 <body>
+
     <div id="toolbox">
         <input type="file" id="hidden-file-upload">
-        <input id="upload-input" type="image" title="upload graph" alt="upload graph">
+        <input id="upload-input" src="data/upload.png" type="image" title="upload graph" alt="upload graph">
         <!--<input type="image" id="download-input" title="download graph" alt="download graph">-->
-        <input type="image" id="delete-graph" title="delete graph" alt="delete graph">
+        <input type="image" id="delete-graph" src="data/Delete.png" title="delete graph" alt="delete graph">
     </div>
 
 
@@ -23,6 +24,7 @@
     <script src="js/viz.js"></script>
     <script src="js/d3-graphviz.js"></script>
     <script src="js/syntaxy.min.js"></script>
+
     <script>
 
         var tempRefArray = new Array();
@@ -32,11 +34,11 @@
         thisGraph.state = {};
         var graphviz = d3.select("#graph").graphviz();
 
+
+
         function render(dotsrc,durationTime) {
             var dotSrcLines = dotsrc.split('\n');
-
             //console.log(dotSrcLines);
-
             transition1 = d3.transition()
                 .delay(100)
                 .duration(durationTime);
@@ -65,15 +67,40 @@
                 }
             });
 
-
             edges = d3.selectAll('.edge');
 
-            edges.on("mouseover", function (d) {
-                // console.log(d);
+            //fuying
+            var tooltip = d3.select("body")
+                .append("div")
+                .attr("class","tooltip")
+                .style("opacity",0.0);
+
+            edges
+                .on("mouseover", function (d) {
+
+                //fuying
+                var edgelabel=d3.select(this)
+                    .select("text")
+                    .text()
+                    // console.log(label)
+
+                tooltip.html(edgelabel)
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY + 20) + "px")
+                    .style("opacity",1.0);
+
                 d3.select(this)
                     .selectAll("text")
                     .transition()
                     .style("fill", "red");
+
+                })
+
+                //fuying
+                .on("mousemove",function (d) {
+                    tooltip.style("left", (d3.event.pageX) + "px")
+                        .style("top", (d3.event.pageY + 20) + "px");
+
                 })
                 .on("mouseout", function (d) {
                     // console.log(this.id);
@@ -85,27 +112,18 @@
                         .transition()
                         .style("fill", function () {
                             if (thisGraph.state.hasOwnProperty(edgeId) && thisGraph.state[edgeId].isClicked === true){
+
                                 return "red";
                             }
                             else{
+
                                 return "black";
                             }
                         });
+                    //fuying
+                    tooltip.style("opacity",0.0);
                 });
-                // .selectAll("text")
-                // .style("fill",function (d) {
-                //     // console.log(d.parent.attributes.id);
-                //
-                //     var edgeId = d.parent.attributes.id;
-                //
-                //     if (thisGraph.state.hasOwnProperty(edgeId) && thisGraph.state[edgeId].isClicked === true){
-                //         console.log(edgeId);
-                //         return "red";
-                //     }
-                //     else{
-                //         return "black";
-                //     }
-                // });
+
 
             var newDotsArray;
 
@@ -121,7 +139,7 @@
                     // console.log(digraphLines);
 
                     dotSrcLinesCopy = digraphLines.split('\n');
-
+                    d3.selectAll(".tooltip").remove();
                     render(digraphLines,1000);
 
                     // console.log(dotSrcLines);
@@ -144,7 +162,15 @@
                     //console.log(thisGraph.state);
 
                     dotsrc = dotSrcLinesCopy.join('\n');
+                    //fuying
+                    d3.selectAll(".tooltip").remove();
                     render(dotsrc,2000);
+                    $(".code_line_color").each(function(i,obj){
+                        if(d3.select(obj).attr("ref")==edgeId){
+                            $(".code_line_color").eq(i).css("background-color","red");
+                        }
+
+                    });
 
 
                 }
@@ -162,7 +188,12 @@
 
                     thisGraph.state[edgeId].isClicked = false;
                     dotsrc = dotSrcLines.join('\n');
+                    //fuying
+                    d3.selectAll(".tooltip").remove();
                     render(dotsrc,1000);
+
+                    $(".code_line_color:nth-child(odd)").css("background","rgb(236, 236, 236)");
+                    $(".code_line_color:nth-child(even)").css("background","rgb(244, 244, 244)");
 
 
                 }
@@ -179,7 +210,6 @@
             edges
                 .on("click", function (d) {
                     var edgeId = d.attributes.id;
-                    // console.log(edgeId);
                     displayEdges(edgeId);
                 });
 
@@ -195,20 +225,14 @@
             var maxLen = 0;
             // add class to show image
             $(".code_line_color").each(function(i,obj){
-                // if(maxLen<$(".code_line_color").eq(i).width()){
-                //     maxLen = $(".code_line_color").eq(i).width();
-                // }
                 if(thisGraph.state.hasOwnProperty(d3.select(obj).attr("ref"))) {
                     $(".code_line_color").eq(i).addClass("yes_img");
                 }
             });
-            // $(".code_line_color").each(function(i,obj) {
-            //     $(".code_line_color").eq(i).width(maxLen);
-            // });
+
         }
         
         function readdotsfile(dotsLines) {
-
 
             var graphLine = 0;
             var graphNameIndex;
@@ -289,12 +313,13 @@
                         d3.selectAll(".node").remove();
                         d3.selectAll(".edge").remove();
                         d3.selectAll(".path").remove();
+                        d3.selectAll(".tooltip").remove();
+
 
                         codehighlight();
 
                         digraphLines = thisGraph.dots["digraph"];
                         //console.log(thisGraph.dots["digraph"]);
-                        //
                         render(thisGraph.dots["digraph"],1000);
 
                     } catch (err) {
@@ -317,6 +342,8 @@
             d3.selectAll(".node").remove();
             d3.selectAll(".edge").remove();
             d3.selectAll(".path").remove();
+            d3.selectAll(".tooltip").remove();
+
 
         });
 
