@@ -65,6 +65,54 @@
                             .attr("fill","red");
                     }
                 }
+
+                tooltipEdges = d3.selectAll('.edge');
+
+                tooltipEdges
+                    .on("mouseover", function (d) {
+
+                        //fuying
+                        var edgelabel=d3.select(this)
+                            .select("text")
+                            .text();
+
+                        tooltip.html(edgelabel)
+                            .style("left", (d3.event.pageX) + "px")
+                            .style("top", (d3.event.pageY + 20) + "px")
+                            .style("opacity",1.0);
+
+                        d3.select(this)
+                            .selectAll("text")
+                            .transition()
+                            .style("fill", "red");
+
+                    })
+                    //fuying
+                    .on("mousemove",function (d) {
+                        tooltip.style("left", (d3.event.pageX) + "px")
+                            .style("top", (d3.event.pageY + 20) + "px");
+                    })
+                    .on("mouseout", function (d) {
+                        // console.log(this.id);
+
+                        var edgeId = this.id;
+
+                        d3.select(this)
+                            .selectAll("text")
+                            .transition()
+                            .style("fill", function () {
+                                if (thisGraph.state.hasOwnProperty(edgeId) && thisGraph.state[edgeId].isClicked === true){
+
+                                    return "red";
+                                }
+                                else{
+
+                                    return "black";
+                                }
+                            });
+                        //fuying
+                        tooltip.style("opacity",0.0);
+                    });
             });
 
             edges = d3.selectAll('.edge');
@@ -74,55 +122,6 @@
                 .append("div")
                 .attr("class","tooltip")
                 .style("opacity",0.0);
-
-            edges
-                .on("mouseover", function (d) {
-
-                //fuying
-                var edgelabel=d3.select(this)
-                    .select("text")
-                    .text()
-                    // console.log(label)
-
-                tooltip.html(edgelabel)
-                    .style("left", (d3.event.pageX) + "px")
-                    .style("top", (d3.event.pageY + 20) + "px")
-                    .style("opacity",1.0);
-
-                d3.select(this)
-                    .selectAll("text")
-                    .transition()
-                    .style("fill", "red");
-
-                })
-
-                //fuying
-                .on("mousemove",function (d) {
-                    tooltip.style("left", (d3.event.pageX) + "px")
-                        .style("top", (d3.event.pageY + 20) + "px");
-
-                })
-                .on("mouseout", function (d) {
-                    // console.log(this.id);
-
-                    var edgeId = this.id;
-
-                    d3.select(this)
-                        .selectAll("text")
-                        .transition()
-                        .style("fill", function () {
-                            if (thisGraph.state.hasOwnProperty(edgeId) && thisGraph.state[edgeId].isClicked === true){
-
-                                return "red";
-                            }
-                            else{
-
-                                return "black";
-                            }
-                        });
-                    //fuying
-                    tooltip.style("opacity",0.0);
-                });
 
 
             var newDotsArray;
@@ -164,10 +163,17 @@
                     dotsrc = dotSrcLinesCopy.join('\n');
                     //fuying
                     d3.selectAll(".tooltip").remove();
+
                     render(dotsrc,2000);
+
+                    // console.log(dotsrc);
+
                     $(".code_line_color").each(function(i,obj){
-                        if(d3.select(obj).attr("ref")==edgeId){
+                        if(d3.select(obj).attr("ref") === edgeId){
                             $(".code_line_color").eq(i).css("background-color","red");
+                        }
+                        else{
+                            $(".code_line_color").eq(i).css("background-color","transparent");
                         }
 
                     });
@@ -306,6 +312,11 @@
                     // TODO better error handling
                     try {
 
+                        tempRefArray = new Array();
+                        digraphLines = '';// main digraph srcLines
+                        thisGraph.dots = {};
+                        thisGraph.state = {};
+
                         var dotsLines = dotsfile.split('\n');
 
                         readdotsfile(dotsLines);
@@ -314,6 +325,7 @@
                         d3.selectAll(".edge").remove();
                         d3.selectAll(".path").remove();
                         d3.selectAll(".tooltip").remove();
+                        d3.selectAll("text").remove();
 
 
                         codehighlight();
@@ -337,12 +349,19 @@
         });
 
         d3.select("#delete-graph").on("click", function () {
+
+            tempRefArray = new Array();
+            digraphLines = '';// main digraph srcLines
+            thisGraph.dots = {};
+            thisGraph.state = {};
+
             // d3.selectAll("path").remove();// remove existing path
             d3.selectAll(".stx-wrap").remove();
             d3.selectAll(".node").remove();
             d3.selectAll(".edge").remove();
             d3.selectAll(".path").remove();
             d3.selectAll(".tooltip").remove();
+            d3.selectAll("text").remove();
 
 
         });
