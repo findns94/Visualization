@@ -51,18 +51,24 @@
             graphvizSvg = d3.selectAll('svg');
             graphvizSvg.transition(transition1)
                 .attr('width',document.body.clientWidth);
-            //console.log(graphvizSvg.attr('width'));
 
             graphvizSvg.on("mouseover",function () {
-                // console.log(thisGraph.state);
-
                 for (edge in thisGraph.state){
                     if (thisGraph.state[edge].isClicked === true){
                         var edgeElement = document.getElementById(edge);
-                        // console.log(edgeElement);
+
                         d3.select(edgeElement)
                             .selectAll("text")
-                            .attr("fill","red");
+                            .attr("fill","red")
+                            .style("font-size", '28px');
+                    }
+                    else{
+                        var edgeElement = document.getElementById(edge);
+
+                        d3.select(edgeElement)
+                            .selectAll("text")
+                            .attr("fill","black")
+                            .style("font-size", '14px');
                     }
                 }
 
@@ -93,7 +99,6 @@
                             .style("top", (d3.event.pageY + 20) + "px");
                     })
                     .on("mouseout", function (d) {
-                        // console.log(this.id);
 
                         var edgeId = this.id;
 
@@ -127,7 +132,6 @@
             var newDotsArray;
 
             function displayEdges(edgeId) {
-                // console.log(thisGraph.state.hasOwnProperty(edgeId));
 
                 if (!thisGraph.state.hasOwnProperty(edgeId)) {
                     // console.log(edgeId + " has no isClicked property");
@@ -135,13 +139,10 @@
                 else if (thisGraph.state[edgeId].isClicked === false) {
                     newDotsArray = thisGraph.dots[edgeId].split('\n');
 
-                    // console.log(digraphLines);
 
                     dotSrcLinesCopy = digraphLines.split('\n');
                     d3.selectAll(".tooltip").remove();
                     render(digraphLines,1000);
-
-                    // console.log(dotSrcLines);
 
                     for (i = 0; i < newDotsArray.length; i++) {
                         if (newDotsArray[i] !== "") {
@@ -150,23 +151,17 @@
                         }
                     }
 
-                    // console.log(dotSrcLines);
-
                     for (i in thisGraph.state){
                         thisGraph.state[i].isClicked = false;
                     }
 
                     thisGraph.state[edgeId].isClicked = true;
 
-                    //console.log(thisGraph.state);
-
                     dotsrc = dotSrcLinesCopy.join('\n');
                     //fuying
                     d3.selectAll(".tooltip").remove();
 
                     render(dotsrc,2000);
-
-                    // console.log(dotsrc);
 
                     $(".code_line_color").each(function(i,obj){
                         if(d3.select(obj).attr("ref") === edgeId){
@@ -185,7 +180,6 @@
 
                     for (i = 0; i < newDotsArray.length; i++) {
                         if (newDotsArray[i] !== "") {
-                            // console.log(deleteIndex);
                             var deleteIndex = dotSrcLines.indexOf(newDotsArray[i]);
                             // delete lines
                             dotSrcLines.splice(deleteIndex, 1);
@@ -194,6 +188,7 @@
 
                     thisGraph.state[edgeId].isClicked = false;
                     dotsrc = dotSrcLines.join('\n');
+
                     //fuying
                     d3.selectAll(".tooltip").remove();
                     render(dotsrc,1000);
@@ -208,7 +203,6 @@
 
             d3.selectAll('.yes_img')
                 .on("click", function () {
-                    // console.log(d3.select(this).attr("ref"));
                     var edgeId = d3.select(this).attr("ref");
                     displayEdges(edgeId);
                 });
@@ -309,7 +303,6 @@
                 filereader.onload = function () {
                     var dotsfile = filereader.result;
 
-                    // TODO better error handling
                     try {
 
                         tempRefArray = new Array();
@@ -331,7 +324,6 @@
                         codehighlight();
 
                         digraphLines = thisGraph.dots["digraph"];
-                        //console.log(thisGraph.dots["digraph"]);
                         render(thisGraph.dots["digraph"],1000);
 
                     } catch (err) {
@@ -377,9 +369,7 @@
                 codehighlight();
 
                 digraphLines = thisGraph.dots["digraph"];
-
-                // console.log(digraphLines);
-
+                
                 render(thisGraph.dots["digraph"],1000);
 
             });
