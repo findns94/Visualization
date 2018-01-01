@@ -428,7 +428,7 @@ d3.request("../data/new.dot")
     });
 
 // 更换代码高亮区块标题
-window.onload = function changeTitle() {
+window.onload = function changeTitle(){
     var codeElement = document.getElementsByClassName("stx-left stx-text");
     codeElement["0"].innerText = "点击源代码可展开子图";
 };
