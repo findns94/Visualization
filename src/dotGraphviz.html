@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <head>
+    <!--CSS样式表-->
     <link rel="stylesheet" href="css/syntaxy.light.min.css"/>
     <link rel="stylesheet" href="css/graph-creator.css"/>
 
@@ -9,16 +10,19 @@
 
     <div id="toolbox">
         <input type="file" id="hidden-file-upload">
+        <!--上传文件按钮-->
         <input id="upload-input" src="../res/upload.png" type="image" title="upload graph" alt="upload graph">
-        <!--<input type="image" id="download-input" title="download graph" alt="download graph">-->
+        <!--删除文件按钮-->
         <input type="image" id="delete-graph" src="../res/Delete.png" title="delete graph" alt="delete graph">
     </div>
 
-
+    <!--代码块-->
     <div id="codebox" data-type="default">
     </div>
 
     <div id="graph" style="text-align: center;"></div>
+
+    <!--Javascript文件-->
     <script src="js/jquery-3.1.1.js"></script>
     <script src="js/d3.v4.min.js"></script>
     <script src="js/viz.js"></script>
